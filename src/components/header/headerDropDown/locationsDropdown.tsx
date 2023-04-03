@@ -9,7 +9,6 @@ import {
   View,
 } from 'react-native';
 import {colors} from '../../../../assets/colors/colors';
-import {DropDownIcon} from '../../../../assets/icons/dropDownIcon';
 import {DropDownModalLayout} from './components/dropDownModalLayout';
 import {
   imageOptions,
@@ -17,25 +16,30 @@ import {
 } from '../../../../assets/constants/localeOptions';
 import {useTranslation} from 'react-i18next';
 import {InitialStateContext} from '../../../../App';
+import Icon from 'react-native-vector-icons/EvilIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const LocationsDropdown = () => {
   const {i18n} = useTranslation();
-  const {setLocale} = useContext(InitialStateContext);
+  const {setLocale, locale} = useContext(InitialStateContext);
   const [open, setOpen] = useState<boolean>(false);
   const handleSetActiveLocation = (e: GestureResponderEvent, key: string) => {
     e.preventDefault();
     e.stopPropagation();
     setOpen(false);
+    AsyncStorage.setItem('locale', key);
     i18n.changeLanguage(key).then();
     setLocale(key);
   };
+
   return (
     <Pressable onPress={() => setOpen(!open)} style={styles.container}>
       <View style={styles.textBlock}>
-        <Text style={styles.title}>{localeOptions[i18n.language]}</Text>
-        <DropDownIcon
-          propStyles={{transform: [{rotate: open ? '-90deg' : '90deg'}]}}
-          stroke={colors.white}
+        <Text style={styles.title}>{localeOptions[locale]}</Text>
+        <Icon
+          name={open ? 'chevron-up' : 'chevron-down'}
+          size={25}
+          color={colors.white}
         />
       </View>
       <Image
@@ -99,7 +103,6 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontFamily: 'Rubik-Regular',
     fontSize: 16,
-    marginRight: 10,
     display: 'flex',
     alignItems: 'center',
   },

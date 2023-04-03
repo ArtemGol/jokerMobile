@@ -1,142 +1,144 @@
 import {en} from '../en/en';
 
 export const zh: typeof en = {
-  header: {
-    placeholder: '搜索',
-    subscribe: '訂閱',
-    tabs: {
-      dns: '域名系統',
-      webmasters: '對於網站管理員',
-      webmastersShort: '對於網站管理員',
-    } as Record<string, string>,
-    liveStreams: '現場直播',
-    addStream: '添加您的流',
-    navbar: {
-      other: '其他',
+  bottomMenu: {
+    matches: '火柴',
+    leagues: '聯賽',
+    favourites: '收藏夾',
+  },
+  matchesPage: {
+    noInternetConnection: '沒有網絡連接',
+    topMatchesTitle: '熱門比賽',
+    vs: '對比',
+    live: '居住',
+    noDataTitle: '今天沒有活動',
+    noDataDescription: '明天回來或選擇其他運動',
+    showNextDayEvents: '顯示第二天的活動',
+    modal: {
+      title: '已添加到收藏夾',
+      description: '活動開始時您會收到通知',
+      checkBox: '不再顯示此消息',
+      buttons: {
+        settings: '設置',
+        success: '行',
+      },
     },
   },
-  layout: {
-    noMatchesFound: {
-      title: '未找到匹配項',
-      description: '抱歉, 沒有找到符合您搜索條件的匹配項',
+  updateModal: {
+    title: '新版本已經可用!',
+    download: '下載',
+    description: {
+      first: '修復了以下錯誤:',
     },
-    chatIsLoading: '正在加載聊天',
-    chatButtons: {
-      hide: '隱藏',
-      adv: '廣告',
-      chat: '聊天',
-      tgChat: '電報聊天',
-    } as Record<string, string>,
-    liveStreams: '現場直播',
   },
-  footer: {
-    'football-live-stream': '足球',
-    basketball: '籃球',
-    tennis: '網球',
-    'american-football': '美式足球',
-  } as Record<string, string>,
-  forWebMastersPage: {
-    breadCrumbs: '添加您的流',
-    title: '網站管理員的實時視頻流鏈接!',
-    putStream: '將我們的體育流小部件放在您的網站上.',
-    copyPaste: '將此代碼複製到您的頁面:',
-    copyPasteGenerated: '將生成的代碼複製到您的頁面:',
-    seeExample: '單擊此處查看示例 (標準視圖)',
-    customize: '如果您需要自定義佈局, 請使用下面的表格:',
-    allSports: '所有運動',
-    settings: {
-      sports: '運動的:',
-      showLive: '現場直播:',
-      timeZone: '時區:',
+  pushNotifications: {
+    notification: {
+      title: '已成功下載更新的應用程序.',
+      message: '轉到下載並更新應用程序.',
     },
-    preview: '預習:',
+    scheduleNotification: {
+      title: '比賽已經開始.',
+      message:
+        '不要錯過 {{league}} 聯賽的 {{homeTeam}} 對陣 {{awayTeam}} 的直播.',
+    },
   },
-  dnsPage: {
-    headerSpan:
-      '要使用控制面板更改 Windows 10 上的域名系統設置，請使用以下步驟:',
-    olList1: {
-      1: '打開控制面板.',
-      2: '點擊網絡和互聯網.',
-      3: '點擊網絡和共享中心.',
-      4: '單擊左窗格中的更改適配器設置選項.',
-      5: `右鍵單擊將 Windows 10 連接到上網的網絡接口, 然後選擇“屬性”選項.<br/>
-          快速提示：您會知道哪個適配器連接到網絡, 因為它沒有“已禁用”或“網絡電纜已拔出”標籤.`,
-      6: '選擇並勾選 Internet 協議版本 4 (TCP/IPv4) 選項',
-      7: '單擊屬性按鈕.',
-      8: '選擇使用以下域名系統服務器地址選項.',
-      9: `鍵入您的“首選”和“備用”域名系統地址.<br />
-          如果您想使用 Cloudflare、Google Public DNS 或 Cisco OpenDNS，您可以使用這些設置:`,
-    } as Record<string, string>,
-    ulList: {
-      1: 'Cloudflare: 1.1.1.1 and 1.0.0.1',
-      2: 'Google Public DNS: 8.8.8.8 and 8.8.4.4',
-      3: 'Google Public DNS: 8.8.8.8 and 8.8.4.4',
-      4: 'OpenDNS: 208.67.222.222 and 208.67.220.220',
-    } as Record<string, string>,
-    olList2: {
-      10: '（可選）單擊“高級”按鈕',
-      11: '單擊域名系統選項卡.',
-      12: '單擊添加按鈕.',
-      13: '指定備用域名系統服務器地址.',
-      14: '單擊添加按鈕.',
-      15: '單擊確定按鈕.',
-      16: '單擊關閉按鈕.',
-    } as Record<string, string>,
+  leaguesPage: {
+    noDataTitle: '今天沒有聯賽',
+    placeholder: '選擇你的聯賽',
   },
-  developmentPage: {
-    breadCrumbs: '開發中',
-    title: '頁面開發中',
-    description: '抱歉, 此頁面正在開發中, 請稍後再試.',
+  favoritesPage: {
+    noDataTitle: '未選擇收藏夾匹配項',
+    noDataDescription: '您尚未為當前運動選擇任何項目',
+    trashModal: {
+      empty: {
+        title: '收藏夾為空',
+        description: '沒有什麼要清除的',
+      },
+      full: {
+        title: '收藏夾將被刪除',
+        description: '您確定要清除收藏夾嗎？',
+      },
+      clear: '癌症',
+      cancel: '取消',
+    },
+  },
+  leaguePage: {
+    noDataTitle: '這個聯盟沒有活動',
+    noDataDescription: '明天回來或選擇另一個聯賽',
   },
   matchPage: {
-    link: '關聯',
-    players: {
-      flash: '閃光',
-      youtube: 'Youtube',
-    } as Record<string, string>,
-    timer: {
-      afterCountDays: '{{dayN}} 天內',
-    },
-  },
-  gamePage: {
-    topMatches: {
-      title: '熱門比賽',
-      vs: '對比',
-    },
-    noData: '沒有數據',
-    live: '居住',
+    aboutMatch: '關於比賽',
     watch: '手錶',
-    scrollToTop: '滾動到頂部',
-    loadMore: '裝載更多',
-    allCompetitions: '所有比賽',
-    favourites: {
-      title: '收藏夾',
-      clearAll: '全部清除',
-    },
+    link: '關聯',
+    streams: '溪流',
   },
-  worldCupPage: {
-    buttons: {
-      groups: '團體',
-      knockOut: '昏死',
+  streamPage: {
+    aboutStream: '關於流',
+    stream: '溪流',
+  },
+  sportsPage: {
+    placeholder: '選擇你的運動',
+    sportList: {
+      '57f045a7': 'Jolly Joker',
+      '07753fa6': '歐洲冠軍聯賽',
+      '0d30db42': '澳網',
+      '7281de84': 'NBA',
+      a0bb958f: '2022年世界杯',
+      a2804112: '足球',
+      '9d321bb2': '网球',
+      a63b8aa9: '美國國家橄欖球聯盟',
+      bbf55c8b: '篮球',
+      ec2cdc35: '赛车运动',
+      '842edfba': '冰球',
+      '3b61c93e': '橄榄球',
+      d1d654cc: '手球',
+      '3f7a342d': '終極格鬥錦標賽',
+      '15d93549': '排球',
+      f415efb9: '拳击',
+      '00e28ace': '棒球',
+      '4d2379e1': '乒乓球',
+      '48ac0404': '电子竞技',
+      '37e7527d': '蟋蟀',
+      '034ddd3b': '斗争',
+      d833d957: '飞镖',
+      '9b0d82f3': '五人',
+      '362b67c6': '羽毛球',
+      '123eed67': '沙滩排球',
+      eb386a00: '澳大利亚规则',
+      f092ac00: '曲棍球',
+      '2e3ab599': '水球',
+      da3972e1: '竞技',
+      cf603120: '地板球',
+      '5d9a63a9': '骑自行车',
+      '3306f86d': '斯诺克',
+      '3c3e36c2': '体操',
+      95917238: '高尔夫球',
+      '5848c23a': '篮球',
+      e2a30c9d: '攀登',
+      '6cca0cad': '冬季运动',
+      '472dcae2': '柔道',
+      '147369e2': '乐队',
+      '652aceb6': '举重',
+      '0e59cd27': '水上运动',
+      '2b9824c6': '跆拳道',
+      '74be752b': '壁球',
     } as Record<string, string>,
-    groupsHeader: {
-      P: '戲劇',
-      W: '贏',
-      D: '畫',
-      L: '失去',
-      goals: '目標',
-      points: '積分',
-    } as Record<string, string>,
-    knockOutFormulations: {
-      '1/8': '1/8',
-      '1/4': '1/4',
-      '1/2': '1/2',
-      quarterfinals: '四分之一決賽',
-      semifinals: '半決賽',
-      final: '最後',
-    } as Record<string, string>,
-    title: '世界杯直播',
-    breadCrumbs: '2022 年世界杯直播',
+  },
+  teamPage: {
+    info: '信息',
+    venue: '場地',
+    tournaments: '錦標賽',
+    coach: '教練',
+    foundationDate: '創立日期',
+    country: '國家',
+    stadium: '體育場',
+    capacity: '容量',
+    city: '城市',
+    tabs: {
+      details: '細節',
+      feature: '賽程比賽',
+      past: '結果',
+    },
   },
   monthList: {
     default: {

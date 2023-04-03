@@ -15,6 +15,7 @@ export const formatDate = (
         .replace('MMM', i18n.t(`monthList.short.${newDate.getMonth()}`))
         .replace('MM', padZero(newDate.getMonth() + 1))
         .replace('yyyy', String(newDate.getFullYear()))
+        .replace('yyy', String(newDate.getFullYear()).slice(2, 4))
         .replace('HH', padZero(newDate.getHours()))
         .replace(
           'hhh',

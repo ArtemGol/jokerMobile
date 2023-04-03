@@ -15,43 +15,68 @@ import {eventRepository} from '../../../assets/api/eventRepository';
 import {CustomImage} from '../customImage/customImage';
 import {NoData} from '../noData/noData';
 import {LeaguesPlug} from '../plugs/leaguesPlug';
+import NetInfo from '@react-native-community/netinfo';
+import {useTranslation} from 'react-i18next';
 
-export function LeaguesScreen({navigation}: {navigation: any}) {
+const LeaguesScreen = ({navigation}: {navigation: any}) => {
+  const {t} = useTranslation();
   const [refreshing, setRefreshing] = useState(false);
+  const [connection, setConnection] = useState(false);
   const {currentSport} = useContext(InitialStateContext);
   const [value, setValue] = useState<string>('');
   const [leagues, setLeagues] = useState<IItem[]>();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-    eventRepository.fetchLeagues(currentSport).then(res => {
-      setLeagues(res);
-      setLoading(false);
+    NetInfo.fetch().then(state => {
+      setConnection(!state.isInternetReachable);
     });
-  }, [currentSport]);
+
+    const unsubscribe = NetInfo.addEventListener(state => {
+      setConnection(!state.isInternetReachable);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!connection) {
+      setLoading(true);
+      eventRepository.fetchLeagues(currentSport || '').then(res => {
+        setLeagues(res);
+        setLoading(false);
+      });
+    }
+  }, [currentSport, connection]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    setLoading(true);
-    eventRepository.fetchLeagues(currentSport).then(res => {
-      setLeagues(res);
-      setLoading(false);
-      setRefreshing(false);
-    });
-  }, [currentSport]);
+    if (!connection) {
+      eventRepository.fetchLeagues(currentSport || '').then(res => {
+        setLeagues(res);
+      });
+    }
+    setRefreshing(false);
+  }, [connection, currentSport]);
 
   return (
     <ImageBackgroundLayout>
       <ScrollView
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl
+            colors={[colors.blue.DEFAULT]}
+            progressBackgroundColor={colors.darkBlue}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
         }
         contentContainerStyle={styles.container}
         stickyHeaderIndices={[0]}>
         <HeaderInput
           setValue={setValue}
-          placeholder="Choose your league"
+          placeholder={t('leaguesPage.placeholder')}
           onClear={() => setValue('')}
         />
         {loading ? (
@@ -64,7 +89,16 @@ export function LeaguesScreen({navigation}: {navigation: any}) {
                 -1,
             )
             .map((el, i) => (
-              <TouchableOpacity style={styles.navbarItem} key={i}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.getParent().navigate('League', {
+                    title: el.league_name,
+                    image: el.league_logo,
+                    leagueId: el.league_uuid,
+                  })
+                }
+                style={styles.navbarItem}
+                key={i}>
                 <CustomImage
                   mockImg={require('../../../assets/images/mockLogos/noLeague.png')}
                   src={el.league_logo}
@@ -75,15 +109,17 @@ export function LeaguesScreen({navigation}: {navigation: any}) {
             ))
         ) : (
           <NoData
-            title="There are no leagues today"
-            description="Come back tomorrow or pick another sport"
+            title={t('leaguesPage.noDataTitle')}
+            description={t('matchesPage.noDataDescription')}
             propsStyles={{height: 550}}
           />
         )}
       </ScrollView>
     </ImageBackgroundLayout>
   );
-}
+};
+
+export default LeaguesScreen;
 
 const styles = StyleSheet.create({
   container: {

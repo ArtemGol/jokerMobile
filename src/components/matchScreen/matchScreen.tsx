@@ -1,151 +1,257 @@
-import React, {useCallback, useContext, useEffect, useState} from 'react';
-import type {IEvent} from '../../../assets/api/dto/IEvent';
-import {InitialStateContext} from '../../../App';
-import {eventRepository} from '../../../assets/api/eventRepository';
-import {endMatchFilterFunc} from '../../../assets/constants/endMatchFilterFunc';
-import {allSettled} from '../../../assets/constants/allSettled';
 import {ImageBackgroundLayout} from '../imageBackgroundLayout/imageBackgroundLayout';
-import {EventsFlashList} from '../eventsFlashList/eventsFlashList';
-import {TopMatches} from '../topMatches/topMatches';
-import {ActivityIndicator, Text, TouchableOpacity, View} from 'react-native';
+import type {IEvent} from '../../../assets/api/dto/IEvent';
+import React, {useCallback, useEffect, useState} from 'react';
+import {eventRepository} from '../../../assets/api/eventRepository';
+import {MatchHeader} from '../matchHeader/matchHeader';
+import {
+  Linking,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {colors} from '../../../assets/colors/colors';
+import {CustomImage} from '../customImage/customImage';
+import {allSettled} from '../../../assets/constants/allSettled';
+import type {IStream} from '../../../assets/api/dto/IStream';
+import {StreamPlug} from '../plugs/streamPlug';
+import Icon from 'react-native-vector-icons/Feather';
+import {useNavigationState} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import NetInfo from '@react-native-community/netinfo';
+import {useTranslation} from 'react-i18next';
 
-const MatchScreen = ({navigation}: {navigation: any}) => {
+const MatchScreen = ({route, navigation}: {route: any; navigation: any}) => {
+  const {t} = useTranslation();
+  const routes = useNavigationState(state => state.routes);
+  const currentMatch: IEvent = route.params.item;
   const [refreshing, setRefreshing] = useState(false);
-
-  const [topMatchesState, setTopMatchesState] = useState<IEvent[]>();
+  const [matchState, setMatchState] = useState<IEvent>(currentMatch);
+  const [loading, setLoading] = useState(false);
+  const [connection, setConnection] = useState(false);
+  const [streamState, setStreamState] = useState<
+    {collection: Record<string, IStream[]>}[]
+  >([]);
 
   useEffect(() => {
-    eventRepository
-      .fetchTopMatches()
-      .then(res =>
-        setTopMatchesState([...res.event_of_day, ...res.top_matches]),
-      );
+    NetInfo.fetch().then(state => {
+      setConnection(!state.isInternetReachable);
+    });
+
+    const unsubscribe = NetInfo.addEventListener(state => {
+      setConnection(!state.isInternetReachable);
+    });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
-  const {currentSport} = useContext(InitialStateContext);
-  const [allEvents, setAllEvents] = useState<IEvent[]>([]);
-  const [page, setPage] = useState<number>(1);
-  const [day, setDay] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const pageSize = 10;
+  const allSettledFunc = async () =>
+    await allSettled([
+      eventRepository.fetchEvent(currentMatch.match_uuid, currentMatch.uuid),
+      eventRepository.fetchStreams(currentMatch.uuid),
+    ])
+      .then(([eventRes, streamsRes]) => {
+        const event =
+          eventRes.state === 'fulfilled' ? eventRes.value?.[0] || '' : '';
+        setMatchState({
+          ...currentMatch,
+          bg_image: event.bg_image,
+          participant_1_uuid: event.participantHome_uuid,
+          participant_2_uuid: event.participantAway_uuid,
+          halftime_score: event?.halftime_score,
+        });
+        if (currentMatch.bg_image !== event.bg_image) {
+          navigation.setParams({
+            item: {...route.params.item, bg_image: event.bg_image},
+          });
+        }
+        setStreamState(
+          streamsRes.state === 'fulfilled' ? streamsRes.value : [],
+        );
+      })
+      .finally(() => setLoading(false));
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    allSettled([
-      eventRepository.fetchAllEvents({
-        sport_og_url: currentSport || 'football-live-stream',
-      }),
-      eventRepository.fetchTopMatches(),
-    ])
-      .then(([eventRes, matchRes]) => {
-        setAllEvents(
-          eventRes.state === 'fulfilled'
-            ? endMatchFilterFunc(eventRes.value[0]?.data)
-            : [],
-        );
-        setTopMatchesState(
-          matchRes.state === 'fulfilled'
-            ? [...matchRes.value.event_of_day, ...matchRes.value.top_matches]
-            : [],
-        );
-      })
-      .finally(() => {
-        setRefreshing(false);
-      });
-  }, [currentSport]);
+    if (!connection) {
+      allSettledFunc();
+    }
+    setRefreshing(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentMatch, connection]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      onRefresh();
-    }, 60000);
-
-    return () => clearInterval(interval);
-  }, [allEvents, onRefresh]);
-
-  useEffect(() => {
-    setPage(1);
-    setDay(1);
-    setLoading(true);
-    eventRepository
-      .fetchAllEvents({sport_og_url: currentSport || 'football-live-stream'})
-      .then(res => setAllEvents(endMatchFilterFunc(res[0]?.data || [])))
-      .finally(() => setLoading(false));
-  }, [currentSport]);
-
-  const {differanceTimeZoneInMs} = useContext(InitialStateContext);
-  const dateFunc = (startTime: number) =>
-    new Date(startTime * 1000 + differanceTimeZoneInMs).toDateString();
-  const dates = Array.from(
-    new Set(
-      allEvents
-        .slice(0, page * pageSize)
-        .map(elem => dateFunc(elem.start_time)),
-    ),
-  );
-
-  const dateArrayObj = dates.slice(0, day).map(elem => ({
-    date: elem,
-    array: allEvents
-      .slice(0, page * pageSize)
-      .filter(filter => dateFunc(filter.start_time) === elem),
-  }));
-
-  const isAllDateLength = dateArrayObj.some(
-    (el, i) =>
-      i === day - 1 &&
-      el.array.length ===
-        allEvents.filter(filter => dateFunc(filter.start_time) === el.date)
-          .length,
-  );
-
-  const renderLoader = () => {
-    return allEvents.slice(0, page * pageSize).length ===
-      allEvents.length ? null : isAllDateLength ? (
-      <TouchableOpacity
-        onPress={() => setDay(prevState => prevState + 1)}
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: 42,
-          backgroundColor: colors.darkBlueOpacity,
-          borderRadius: 8,
-        }}>
-        <Text style={{color: colors.white, fontFamily: 'Rubik-Bold'}}>
-          Show next day events
-        </Text>
-      </TouchableOpacity>
-    ) : (
-      <View style={{paddingVertical: 10}}>
-        <ActivityIndicator size="large" color={colors.blue.DEFAULT} />
-      </View>
-    );
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('timeOutId');
+      if (value !== null) {
+        clearTimeout(Number(value));
+      }
+    } catch (e) {}
   };
 
-  const loadMoreItems = () => {
-    !isAllDateLength && setPage(prevState => prevState + 1);
-  };
+  useEffect(() => {
+    if (routes[0].name === 'Splash' && routes.length === 2) {
+      getData();
+    }
+    if (!connection) {
+      setLoading(true);
+      allSettledFunc().finally(() => setLoading(false));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentMatch, connection]);
+
+  const handleReplace = async (url: string) => await Linking.openURL(url);
+
+  const handleSecret = (stream: string) =>
+    navigation.navigate('Stream', {
+      title: t('streamPage.aboutStream'),
+      item: matchState,
+      stream,
+    });
 
   return (
     <ImageBackgroundLayout>
-      <EventsFlashList
-        dateArrayObj={dateArrayObj}
-        renderLoader={renderLoader}
-        loadMoreItems={loadMoreItems}
-        pageSize={pageSize}
-        noDataPropsStyles={{height: 170}}
-        loading={loading}
-        refreshing={refreshing}
-        onRefresh={onRefresh}
-        listHeaderComponent={
-          <TopMatches loading={loading} topMatchesState={topMatchesState} />
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            colors={[colors.blue.DEFAULT]}
+            progressBackgroundColor={colors.darkBlue}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
         }
-        noDataTitle="There are no events today"
-        noDataDescription="Come back tomorrow or pick another sport"
-      />
+        contentContainerStyle={styles.container}>
+        <MatchHeader event={matchState} />
+        <Text style={styles.title}>{t('matchPage.streams')}</Text>
+        {loading ? (
+          <StreamPlug />
+        ) : (
+          streamState?.map(elem =>
+            Object.entries(elem.collection)
+              .filter(
+                ([key]) => key !== 'JokerHDpass - HD ads free streams only!',
+              )
+              .map(([key, value], i) => (
+                <View key={key + i}>
+                  {value.some(
+                    someElem =>
+                      someElem.name === 'YouTube' ||
+                      key === '(English) - Deposit and watch!',
+                  ) ? (
+                    <Text style={styles.streamTitle}>{key}</Text>
+                  ) : null}
+                  {value
+                    .filter(
+                      el =>
+                        key !== 'Other Links' ||
+                        (key === 'Other Links' && el.name === 'YouTube'),
+                    )
+                    .map((childEl, index) => (
+                      <TouchableOpacity
+                        onPress={() =>
+                          childEl.type === 'ql'
+                            ? handleReplace(childEl.stream)
+                            : handleSecret(childEl.stream)
+                        }
+                        key={index}
+                        style={styles.streamBlock}>
+                        <CustomImage
+                          imageStyles={
+                            childEl.name === 'YouTube'
+                              ? styles.youtubeImg
+                              : styles.streamImage
+                          }
+                          src={childEl.icon}
+                        />
+                        <Text style={styles.streamLink}>
+                          {t('matchPage.link')} #{index + 1}
+                        </Text>
+                        <Text style={styles.streamDescription}>
+                          {childEl.description}
+                        </Text>
+                        <View style={styles.watchBlock}>
+                          <Text style={styles.watchText}>
+                            {t('matchPage.watch')}
+                          </Text>
+                          <Icon
+                            name="chevron-right"
+                            size={15}
+                            color={colors.white}
+                          />
+                        </View>
+                      </TouchableOpacity>
+                    ))}
+                </View>
+              )),
+          )
+        )}
+      </ScrollView>
     </ImageBackgroundLayout>
   );
 };
 
 export default MatchScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 10,
+  },
+  title: {
+    fontFamily: 'Rubik-Bold',
+    fontSize: 16,
+    color: colors.white,
+    marginTop: 10,
+    marginBottom: 15,
+  },
+  streamTitle: {
+    fontSize: 14,
+    fontFamily: 'Rubik-Bold',
+    color: colors.white,
+    marginBottom: 5,
+  },
+  streamBlock: {
+    backgroundColor: colors.darkBlueOpacity,
+    flexDirection: 'row',
+    borderRadius: 8,
+    borderColor: colors.violet,
+    borderWidth: 2,
+    padding: 5,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  streamImage: {
+    width: 16,
+    height: 16,
+  },
+  youtubeImg: {
+    width: 22,
+    height: 16,
+  },
+  streamLink: {
+    fontSize: 14,
+    color: colors.violet,
+  },
+  streamDescription: {
+    fontSize: 14,
+    color: colors.white,
+    width: '40%',
+  },
+  watchBlock: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.violet,
+    borderRadius: 8,
+    height: 30,
+    paddingHorizontal: 5,
+  },
+  watchText: {
+    fontSize: 14,
+    fontFamily: 'Rubik-Bold',
+    color: colors.white,
+  },
+});

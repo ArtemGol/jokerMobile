@@ -8,18 +8,17 @@ import {useTranslation} from 'react-i18next';
 
 interface IProps {
   topMatchesState?: IEvent[];
-  loading: boolean;
 }
 
-export const TopMatches = ({topMatchesState, loading}: IProps) => {
+const TopMatches = ({topMatchesState}: IProps) => {
   const {t} = useTranslation();
   return (
     <View style={{marginBottom: 10}}>
       <Text style={styles.topMatchesTitle}>
-        {t('gamePage.topMatches.title')}
+        {t('matchesPage.topMatchesTitle')}
       </Text>
       <ScrollView horizontal contentContainerStyle={styles.topMatchesContainer}>
-        {topMatchesState && topMatchesState?.length && !loading
+        {topMatchesState && topMatchesState?.length
           ? topMatchesState?.map((elem, i) => (
               <TopMatchItem
                 event={elem}
@@ -34,6 +33,8 @@ export const TopMatches = ({topMatchesState, loading}: IProps) => {
     </View>
   );
 };
+
+export default TopMatches;
 
 const styles = StyleSheet.create({
   topMatchesContainer: {

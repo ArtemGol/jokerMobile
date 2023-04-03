@@ -1,141 +1,142 @@
 export const en = {
-  header: {
-    placeholder: 'Search',
-    subscribe: 'Subscribe',
-    tabs: {
-      dns: 'DNS',
-      webmasters: 'For webmasters',
-      webmastersShort: 'WEB',
-    } as Record<string, string>,
-    liveStreams: 'Live Stream',
-    addStream: 'Add your stream',
-    navbar: {
-      other: 'Other',
+  bottomMenu: {
+    matches: 'Matches',
+    leagues: 'Leagues',
+    favourites: 'Favourites',
+  },
+  matchesPage: {
+    noInternetConnection: 'No internet connection',
+    topMatchesTitle: 'Top Matches',
+    vs: 'VS',
+    live: 'Live',
+    noDataTitle: 'There are no events today',
+    noDataDescription: 'Come back tomorrow or pick another sport',
+    showNextDayEvents: 'Show next day events',
+    modal: {
+      title: 'Added to favorites',
+      description: 'You will be notified when this event starts',
+      checkBox: "Don't show this message again",
+      buttons: {
+        settings: 'Settings',
+        success: 'Ok',
+      },
     },
   },
-  layout: {
-    noMatchesFound: {
-      title: 'No matches found',
-      description: 'Sorry, no matches were found for your search',
+  updateModal: {
+    title: 'The new version is already available!',
+    download: 'Download',
+    description: {
+      first: 'Fixed the following bugs:',
     },
-    chatIsLoading: 'Chat is loading',
-    chatButtons: {
-      hide: 'Hide',
-      adv: 'Adv',
-      chat: 'Chat',
-      tgChat: 'Tg chat',
-    } as Record<string, string>,
-    liveStreams: 'Live streams',
   },
-  footer: {
-    'football-live-stream': 'Football',
-    basketball: 'Basketball',
-    tennis: 'Tennis',
-    'american-football': 'American Football',
-  } as Record<string, string>,
-  forWebMastersPage: {
-    breadCrumbs: 'Add Your Stream',
-    title: 'Live Video Streaming links for Webmasters !',
-    putStream: 'Put our Sport Streams Widget on your website.',
-    copyPaste: 'Just copy/paste this code to your page:',
-    copyPasteGenerated: 'Copy/paste the generated code to your page:',
-    seeExample: 'Click here to see an example (Standard View)',
-    customize: 'If you need to customize your layout, use the form below:',
-    allSports: 'All sports',
-    settings: {
-      sports: 'Sports:',
-      showLive: 'Show "Live":',
-      timeZone: 'Time Zone:',
+  pushNotifications: {
+    notification: {
+      title: 'Updated app successfully downloaded.',
+      message: 'Go to downloads and update the app.',
     },
-    preview: 'Preview:',
+    scheduleNotification: {
+      title: 'The match has already started.',
+      message:
+        "Don't miss the live stream {{homeTeam}} vs {{awayTeam}} of {{league}} League.",
+    },
   },
-  dnsPage: {
-    headerSpan:
-      'To change the DNS settings on Windows 10 using Control Panel, use these steps:',
-    olList1: {
-      1: 'Open Control Panel.',
-      2: 'Click on Network and Internet.',
-      3: 'Click on Network and Sharing Center.',
-      4: 'Click the Change adapter settings option in the left pane.',
-      5: `Right-click the network interface that connects Windows 10 to the internet, and select the Properties option.<br/>
-          Quick tip: You’ll know which adapter is connected to the network because it won’t have a “Disabled” or “Network cable unplugged” label.`,
-      6: 'Select and check the Internet Protocol Version 4 (TCP/IPv4) option',
-      7: 'Click the Properties button.',
-      8: 'Select the Use the following DNS server addresses option.',
-      9: `Type your “preferred” and “alternate” DNS addresses.<br />
-          If you want to use Cloudflare, Google Public DNS, or Cisco OpenDNS, you can use these settings:`,
-    } as Record<string, string>,
-    ulList: {
-      1: 'Cloudflare: 1.1.1.1 and 1.0.0.1',
-      2: 'Google Public DNS: 8.8.8.8 and 8.8.4.4',
-      3: 'Google Public DNS: 8.8.8.8 and 8.8.4.4',
-      4: 'OpenDNS: 208.67.222.222 and 208.67.220.220',
-    } as Record<string, string>,
-    olList2: {
-      10: '(Optional) Click the Advanced button',
-      11: 'Click the DNS tab.',
-      12: 'Click the Add button.',
-      13: 'Specify the alternate DNS server address.',
-      14: 'Click the Add button.',
-      15: 'Click the OK button.',
-      16: 'Click the Close button.',
-    } as Record<string, string>,
+  leaguesPage: {
+    noDataTitle: 'There are no leagues today',
+    placeholder: 'Choose your league',
   },
-  developmentPage: {
-    breadCrumbs: 'In Development',
-    title: 'Page under development',
-    description:
-      'Sorry, this page is under development. You will be able to add your streams shortly, thank you!',
+  favoritesPage: {
+    noDataTitle: 'Favourites matches not selected',
+    noDataDescription: 'You have not selected any events for the current sport',
+    trashModal: {
+      empty: {
+        title: 'Favourites is empty',
+        description: 'There is nothing to clear',
+      },
+      full: {
+        title: 'Favourites will be deleted',
+        description: "Are you sure, that's you want to clear favourites?",
+      },
+      clear: 'Clear',
+      cancel: 'Cancel',
+    },
+  },
+  leaguePage: {
+    noDataTitle: 'There are no events by this league',
+    noDataDescription: 'Come back tomorrow or pick another league',
   },
   matchPage: {
-    link: 'Link',
-    players: {
-      flash: 'Flash',
-      youtube: 'Youtube',
-    } as Record<string, string>,
-    timer: {
-      afterCountDays: 'In {{dayN}} days',
-    },
-  },
-  gamePage: {
-    topMatches: {
-      title: 'Top Matches',
-      vs: 'vs',
-    },
-    noData: 'No data',
-    live: 'Live',
+    aboutMatch: 'About Match',
     watch: 'Watch',
-    scrollToTop: 'Scroll to top',
-    loadMore: 'Load more',
-    allCompetitions: 'All competitions',
-    favourites: {
-      title: 'Favorites',
-      clearAll: 'Clear all',
-    },
+    link: 'Link',
+    streams: 'Streams',
   },
-  worldCupPage: {
-    buttons: {
-      groups: 'Groups',
-      knockOut: 'Knockout',
+  streamPage: {
+    aboutStream: 'About Stream',
+    stream: 'Stream',
+  },
+  sportsPage: {
+    placeholder: 'Choose your sport',
+    sportList: {
+      '57f045a7': 'Jolly Joker',
+      '07753fa6': 'UEFA Champions League',
+      '0d30db42': 'Australian Open',
+      '7281de84': 'NBA',
+      a0bb958f: 'World Cup 2022',
+      a2804112: 'Football',
+      '9d321bb2': 'Tennis',
+      a63b8aa9: 'NFL',
+      bbf55c8b: 'Basketball',
+      ec2cdc35: 'Motorsport',
+      '842edfba': 'Ice Hockey',
+      '3b61c93e': 'Rugby',
+      d1d654cc: 'Handball',
+      '3f7a342d': 'UFC',
+      '15d93549': 'Volleyball',
+      f415efb9: 'Boxing',
+      '00e28ace': 'Baseball',
+      '4d2379e1': 'Table tennis',
+      '48ac0404': 'E-sports',
+      '37e7527d': 'Cricket',
+      '034ddd3b': 'Fighting',
+      d833d957: 'Darts',
+      '9b0d82f3': 'Futsal',
+      '362b67c6': 'Badminton',
+      '123eed67': 'Beach Volley',
+      eb386a00: 'Aussie rules',
+      f092ac00: 'Field Hockey',
+      '2e3ab599': 'Waterpolo',
+      da3972e1: 'Athletics',
+      cf603120: 'Floorball',
+      '5d9a63a9': 'Cycling',
+      '3306f86d': 'Snooker',
+      '3c3e36c2': 'Gymnastics',
+      95917238: 'Golf',
+      '5848c23a': 'Netball',
+      e2a30c9d: 'Climbing',
+      '6cca0cad': 'Winter Sports',
+      '472dcae2': 'Judo',
+      '147369e2': 'Bandy',
+      '652aceb6': 'Powerlifting',
+      '0e59cd27': 'Water Sports',
+      '2b9824c6': 'Taekwondo',
+      '74be752b': 'Squash',
     } as Record<string, string>,
-    groupsHeader: {
-      P: 'P',
-      W: 'W',
-      D: 'D',
-      L: 'L',
-      goals: 'Goals',
-      points: 'Pts',
-    } as Record<string, string>,
-    knockOutFormulations: {
-      '1/8': '1/8',
-      '1/4': '1/4',
-      '1/2': '1/2',
-      quarterfinals: 'Quarterfinals',
-      semifinals: 'Semifinals',
-      final: 'Final',
-    } as Record<string, string>,
-    title: 'World Cup Live Streams',
-    breadCrumbs: 'World Cup 2022 Live Streams',
+  },
+  teamPage: {
+    info: 'Info',
+    venue: 'Venue',
+    tournaments: 'Tournament',
+    coach: 'Coach',
+    foundationDate: 'Foundation date',
+    country: 'Country',
+    stadium: 'Stadium',
+    capacity: 'Capacity',
+    city: 'City',
+    tabs: {
+      details: 'Details',
+      feature: 'Fixtures',
+      past: 'Results',
+    },
   },
   monthList: {
     default: {

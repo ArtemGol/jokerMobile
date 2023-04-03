@@ -1,17 +1,18 @@
 import {EventItemPlug} from '../plugs/eventItemPlug';
 import {RefreshControl, StyleSheet, Text} from 'react-native';
 import {formatDate} from '../../../assets/constants/date';
-import {DateTableItem} from '../dateTableItem/dateTableItem';
 import {FlashList} from '@shopify/flash-list';
 import {colors} from '../../../assets/colors/colors';
 import {NoData} from '../noData/noData';
 import type {IEvent} from '../../../assets/api/dto/IEvent';
-import {useEffect, useState} from 'react';
-import {SuccessAddedModal} from '../favouritesModals/successAddedModal';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {lazy, useContext, useState} from 'react';
+import {SuccessAddedModal} from '../modals/successAddedModal';
+import {InitialStateContext} from '../../../App';
+
+const DateTableItem = lazy(() => import('../dateTableItem/dateTableItem'));
 
 interface IProps {
-  loading: boolean;
+  loading?: boolean;
   refreshing: boolean;
   listHeaderComponent?: JSX.Element;
   onRefresh?: () => void;
@@ -37,21 +38,12 @@ export const EventsFlashList = ({
   renderLoader,
   dateArrayObj,
 }: IProps) => {
+  const {isChecked, setIsChecked} = useContext(InitialStateContext);
   const [visibleModal, setVisibleModal] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
 
-  const readData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('checked');
-      setIsChecked(value === 'true');
-    } catch (e) {}
-  };
-  useEffect(() => {
-    readData();
-  }, [isChecked]);
   return (
     <>
-      {visibleModal && (
+      {visibleModal && !isChecked && (
         <SuccessAddedModal
           setIsChecked={setIsChecked}
           setVisible={setVisibleModal}
@@ -76,7 +68,12 @@ export const EventsFlashList = ({
         ListFooterComponent={renderLoader}
         ListHeaderComponent={listHeaderComponent}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl
+            colors={[colors.blue.DEFAULT]}
+            progressBackgroundColor={colors.darkBlue}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
         }
         contentContainerStyle={styles.container}
         data={dateArrayObj}
@@ -92,7 +89,6 @@ export const EventsFlashList = ({
               {item.array.map((el, i) => (
                 <DateTableItem
                   setVisibleModal={() => setVisibleModal(!isChecked)}
-                  isChecked={isChecked}
                   key={i}
                   item={el}
                 />

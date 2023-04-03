@@ -2,16 +2,16 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 import {colors} from '../../../assets/colors/colors';
-import {Football} from '../../../assets/icons/gameIcons/football';
-import {CloseIcon} from '../../../assets/icons/closeIcon';
 import {useContext, useState} from 'react';
 import {InitialStateContext} from '../../../App';
 import {HeaderInput} from '../headerInput/headerInput';
+import CustomIcon from '../../../assets/constants/CustomIcon';
+import {CustomImage} from '../customImage/customImage';
+import {useTranslation} from 'react-i18next';
 
 interface IProps {
   navigation: any;
@@ -19,29 +19,35 @@ interface IProps {
 }
 
 export function SportsModal({navigation}: IProps) {
+  const {t} = useTranslation();
   const {currentSport, setCurrentSport, allSports} =
     useContext(InitialStateContext);
   const [value, setValue] = useState<string>('');
-  const handleNavigate = (sportName: string, sportUrl: string) => {
-    navigation.navigate('Football', {title: sportName});
-    setCurrentSport(sportUrl);
+  const handleSetParams = (sportId: string, sportUrl: string) => {
+    navigation.navigate('Football', {
+      title: sportId,
+    });
+    setTimeout(() => setCurrentSport(sportUrl));
   };
   return (
     <ScrollView stickyHeaderIndices={[0]} style={styles.container}>
       <View>
         <HeaderInput
-          placeholder="Choose your sport"
+          placeholder={t('sportsPage.placeholder')}
           onClear={() => navigation.goBack()}
           setValue={setValue}
         />
       </View>
       {allSports
         ?.filter(
-          filer => filer.name.toLowerCase().indexOf(value.toLowerCase()) > -1,
+          filer =>
+            t(`sportsPage.sportList.${filer.uuid}`)
+              .toLowerCase()
+              .indexOf(value.toLowerCase()) > -1,
         )
         .map((el, i) => (
           <TouchableOpacity
-            onPress={() => handleNavigate(el.name, el.og_url)}
+            onPress={() => handleSetParams(el.uuid, el.og_url)}
             key={i}
             style={[
               styles.navbarItem,
@@ -49,8 +55,19 @@ export function SportsModal({navigation}: IProps) {
                 backgroundColor: colors.blueOpacity1,
               },
             ]}>
-            <Football />
-            <Text style={styles.text}>{el.name}</Text>
+            {el.svg_icon ? (
+              <CustomIcon name={el.uuid} size={25} color={colors.violet} />
+            ) : el.sport_logo ? (
+              <CustomImage
+                src={el.sport_logo}
+                imageStyles={{width: 25, height: 25}}
+              />
+            ) : (
+              <CustomIcon name="a2804112" size={25} color={colors.violet} />
+            )}
+            <Text style={styles.text}>
+              {t(`sportsPage.sportList.${el.uuid}`)}
+            </Text>
           </TouchableOpacity>
         ))}
     </ScrollView>

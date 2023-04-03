@@ -25,9 +25,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Rubik-Bold',
     fontSize: 16,
     color: colors.blue.DEFAULT,
+    textAlign: 'center',
   },
   description: {
     color: colors.blue.DEFAULT,
     fontSize: 14,
+    textAlign: 'center',
   },
 });

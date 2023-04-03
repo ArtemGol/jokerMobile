@@ -1,7 +1,6 @@
 import {Image, StyleSheet, View} from 'react-native';
 import {colors} from '../../../assets/colors/colors';
-import React from 'react';
-import Icon from 'react-native-vector-icons/Ionicons';
+import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 interface ITeam {
   propsStyles?: object;
@@ -19,28 +18,47 @@ const TeamBlock = ({propsStyles}: ITeam) => {
   );
 };
 
+export const ItemPlug = () => (
+  <View style={styles.eventItem}>
+    <View>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginBottom: 5,
+        }}>
+        <Image
+          style={styles.leagueImage}
+          source={require('../../../assets/images/mockLogos/noLeague.png')}
+        />
+        <View style={[styles.textPlug, {width: 150, marginBottom: 5}]} />
+      </View>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            marginRight: 10,
+          }}>
+          <View style={[styles.textPlug, {width: 40, marginTop: 5}]} />
+        </View>
+        <View>
+          <TeamBlock propsStyles={{marginBottom: 5}} />
+          <TeamBlock />
+        </View>
+      </View>
+    </View>
+    <AwesomeIcon name="star" size={25} color={colors.blue.DEFAULT} />
+  </View>
+);
+
 export const EventItemPlug = () => {
   return (
     <View>
       <View style={styles.dateTitle} />
       {new Array(2).fill(null).map((_, i) => (
-        <View key={i} style={styles.eventItem}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <View style={{marginRight: 5, alignItems: 'center'}}>
-              <Image
-                style={styles.leagueImage}
-                source={require('../../../assets/images/mockLogos/noLeague.png')}
-              />
-              <View style={[styles.textPlug, {width: 40, marginTop: 5}]} />
-            </View>
-            <View>
-              <View style={[styles.textPlug, {width: 150, marginBottom: 5}]} />
-              <TeamBlock propsStyles={{marginBottom: 5}} />
-              <TeamBlock />
-            </View>
-          </View>
-          <Icon name="ios-star" size={25} color={colors.blue.DEFAULT} />
-        </View>
+        <ItemPlug key={i} />
       ))}
     </View>
   );
@@ -58,8 +76,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.blue.DEFAULT,
   },
   leagueImage: {
-    width: 40,
-    height: 40,
+    width: 20,
+    height: 20,
+    marginRight: 10,
   },
   eventItem: {
     flexDirection: 'row',

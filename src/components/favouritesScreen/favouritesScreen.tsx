@@ -6,17 +6,18 @@ import {EventsFlashList} from '../eventsFlashList/eventsFlashList';
 import {endMatchFilterFunc} from '../../../assets/constants/endMatchFilterFunc';
 import {ActivityIndicator, View} from 'react-native';
 import {colors} from '../../../assets/colors/colors';
+import {useTranslation} from 'react-i18next';
 
-export function FavouritesScreen({navigation}: {navigation: any}) {
-  const {currentSport, differanceTimeZoneInMs, favourites, setFavourites} =
+const FavouritesScreen = () => {
+  const {t} = useTranslation();
+  const {differanceTimeZoneInMs, favourites, setFavourites} =
     useContext(InitialStateContext);
   const [page, setPage] = useState<number>(1);
-  const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const pageSize = 10;
   const readData = async () => {
     try {
-      const value = await AsyncStorage.getItem(currentSport);
+      const value = await AsyncStorage.getItem('favourites');
       setFavourites(
         value !== null ? endMatchFilterFunc(JSON.parse(value)) : [],
       );
@@ -59,7 +60,7 @@ export function FavouritesScreen({navigation}: {navigation: any}) {
       setRefreshing(false);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentSport]);
+  }, []);
 
   return (
     <ImageBackgroundLayout>
@@ -69,12 +70,13 @@ export function FavouritesScreen({navigation}: {navigation: any}) {
         dateArrayObj={dateArrayObj}
         pageSize={pageSize}
         noDataPropsStyles={{height: 600}}
-        loading={loading}
         refreshing={refreshing}
         onRefresh={onRefresh}
-        noDataTitle="There are no favourites"
-        noDataDescription="You have not selected any events for the current sport"
+        noDataTitle={t('favoritesPage.noDataTitle')}
+        noDataDescription={t('favoritesPage.noDataDescription')}
       />
     </ImageBackgroundLayout>
   );
-}
+};
+
+export default FavouritesScreen;

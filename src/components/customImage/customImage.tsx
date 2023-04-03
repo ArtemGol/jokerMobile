@@ -5,7 +5,7 @@ interface IProps {
   src: string;
   src2?: string;
   imageStyles: object;
-  mockImg: object;
+  mockImg?: object;
 }
 
 export const CustomImage = ({src, src2, imageStyles, mockImg}: IProps) => {

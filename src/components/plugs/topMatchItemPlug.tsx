@@ -38,7 +38,7 @@ export const TopMatchItemPlug = ({first}: IProps) => {
               textTransform: 'uppercase',
             },
           ]}>
-          {t('gamePage.topMatches.vs')}
+          {t('matchesPage.vs')}
         </Text>
         <TeamBlock />
       </View>

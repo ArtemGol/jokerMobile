@@ -8,14 +8,9 @@
  * @format
  */
 
-import React, {createContext, useEffect, useState} from 'react';
-import {
-  Button,
-  Pressable,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
+import React, {createContext, useContext, useEffect, useState} from 'react';
+import {Image, StatusBar, View} from 'react-native';
 import './i18n.config';
 import {
   getFocusedRouteNameFromRoute,
@@ -23,25 +18,35 @@ import {
 } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/Ionicons';
+import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {colors} from './assets/colors/colors';
-import {HeaderTitle} from './src/components/headerTitle/headerTitle';
 import {sportsRepository} from './assets/api/sportsRepository';
 import {ISports} from './assets/api/dto/IMeta';
 import {SportsModal} from './src/components/modal/sportsModal';
-import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-} from '@react-navigation/drawer';
-import {DrawerMenu} from './src/components/drawerMenu/drawerMenu';
-import MatchScreen from './src/components/matchScreen/matchScreen';
-import {LeaguesScreen} from './src/components/leaguesScreen/leaguesScreen';
-import {FavouritesScreen} from './src/components/favouritesScreen/favouritesScreen';
-import {FavouritesTrashModal} from './src/components/favouritesModals/favouritesTrashModal';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import DrawerMenu from './src/components/drawerMenu/drawerMenu';
+import MatchesScreen from './src/components/matchesScreen/matchesScreen';
+import LeaguesScreen from './src/components/leaguesScreen/leaguesScreen';
+import FavouritesScreen from './src/components/favouritesScreen/favouritesScreen';
+import {FavouritesTrashModal} from './src/components/modals/favouritesTrashModal';
 import {IEvent} from './assets/api/dto/IEvent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {endMatchFilterFunc} from './assets/constants/endMatchFilterFunc';
 import PushNotification, {Importance} from 'react-native-push-notification';
+import LeagueScreen from './src/components/leagueScreen/leagueScreen';
+import MatchScreen from './src/components/matchScreen/matchScreen';
+import StreamScreen from './src/components/streamScreen/streamScreen';
+import {navigationRef} from './src/services/RootNavigation';
+import {ImageBackgroundLayout} from './src/components/imageBackgroundLayout/imageBackgroundLayout';
+import NetInfo from '@react-native-community/netinfo';
+import {NavigationCustomHeader} from './src/components/navigationCustomHeader/navigationCustomHeader';
+import {useTranslation} from 'react-i18next';
+import {NavigationCustomMatchHeader} from './src/components/navigationCustomHeader/navigationCustomMatchHeader';
+import Orientation from 'react-native-orientation-locker';
+import DeviceInfo from 'react-native-device-info';
+import {NeedUpdateModal} from './src/components/modals/needUpdateModal';
+import {versionRepository} from './assets/api/versionRepository';
+import teamScreen from './src/components/teamScreen/teamScreen';
 
 interface InitialStateContextInterface {
   allSports: ISports[];
@@ -50,10 +55,12 @@ interface InitialStateContextInterface {
   setTimeZone: (ms: number) => void;
   locale: string;
   setLocale: (locale: string) => void;
-  currentSport: string;
+  currentSport: string | null;
   setCurrentSport: (sport: string) => void;
   favourites: IEvent[];
   setFavourites: (events: IEvent[]) => void;
+  isChecked: boolean;
+  setIsChecked: (checked: boolean) => void;
 }
 
 const InitialState: InitialStateContextInterface = {
@@ -69,13 +76,17 @@ const InitialState: InitialStateContextInterface = {
   setLocale(locale) {
     InitialState.locale = locale;
   },
-  currentSport: 'football-live-stream',
+  currentSport: null,
   setCurrentSport(sport) {
     InitialState.currentSport = sport;
   },
   favourites: [],
   setFavourites(favourites) {
     InitialState.favourites = favourites;
+  },
+  isChecked: false,
+  setIsChecked(checked) {
+    InitialState.isChecked = checked;
   },
 };
 
@@ -86,95 +97,238 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
-function NotificationsScreen({navigation}: {navigation: any}) {
-  return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Button onPress={() => navigation.goBack()} title="Go back home" />
-    </View>
-  );
-}
-
 function Home() {
+  const {t} = useTranslation();
+  const {favourites} = useContext(InitialStateContext);
   return (
     <Tab.Navigator
+      initialRouteName="Matches"
       screenOptions={({route}) => ({
-        tabBarIcon: ({focused, color, size}) => {
+        lazy: true,
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: colors.darkBlue,
+          paddingBottom: 5,
+          borderTopColor: colors.blue[700],
+        },
+        headerPressOpacity: 10,
+        tabBarIcon: ({color, size}) => {
           let iconName;
 
-          if (route.name === 'League') {
-            iconName = focused
-              ? 'ios-information-circle'
-              : 'ios-information-circle-outline';
-          } else if (route.name === 'Match') {
-            iconName = focused ? 'ios-football' : 'ios-football-outline';
+          if (route.name === 'Leagues') {
+            iconName = 'trophy';
+          } else if (route.name === 'Matches') {
+            iconName = 'clock-o';
           } else if (route.name === 'Favourites') {
-            iconName = focused ? 'ios-star' : 'ios-star-outline';
+            iconName = 'star';
           }
 
           // You can return any component that you like here!
-          return <Icon name={`${iconName}`} size={size} color={color} />;
+          return <AwesomeIcon name={`${iconName}`} size={size} color={color} />;
         },
         tabBarActiveTintColor: colors.violet,
-        tabBarInactiveTintColor: colors.gray,
+        tabBarInactiveTintColor: colors.blue.DEFAULT,
       })}>
       <Tab.Screen
-        name="League"
-        options={{headerShown: false}}
+        name="Matches"
+        options={{title: t('bottomMenu.matches') || ''}}
+        component={MatchesScreen}
+      />
+      <Tab.Screen
+        name="Leagues"
+        options={{title: t('bottomMenu.leagues') || ''}}
         component={LeaguesScreen}
       />
       <Tab.Screen
-        name="Match"
-        options={{headerShown: false}}
-        component={MatchScreen}
-      />
-      <Tab.Screen
         name="Favourites"
-        options={{headerShown: false}}
         component={FavouritesScreen}
+        options={{
+          tabBarBadge: favourites.length || undefined,
+          title: t('bottomMenu.favourites') || '',
+        }}
       />
     </Tab.Navigator>
   );
 }
 
-function MainPage() {
-  const [visibleModal, setVisibleModal] = useState(false);
+function SplashScreenNav({navigation}: {navigation: any}) {
+  const timeOutId = setTimeout(() => navigation.replace('Football'), 2000);
+  AsyncStorage.setItem('timeOutId', String(timeOutId));
   return (
-    <Stack.Navigator initialRouteName="Football">
+    <ImageBackgroundLayout>
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <Image source={require('./assets/images/screenlogo.png')} />
+      </View>
+    </ImageBackgroundLayout>
+  );
+}
+
+function MainPage() {
+  const {t} = useTranslation();
+  const [visibleModal, setVisibleModal] = useState(false);
+  const [connection, setConnection] = useState(false);
+
+  useEffect(() => {
+    NetInfo.fetch().then(state => {
+      setConnection(!state.isInternetReachable);
+    });
+
+    const unsubscribe = NetInfo.addEventListener(state => {
+      setConnection(!state.isInternetReachable);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  return (
+    <Stack.Navigator initialRouteName="Splash">
       <Stack.Group>
+        <Stack.Screen
+          name="Splash"
+          component={SplashScreenNav}
+          options={{headerShown: false}}
+        />
         <Stack.Screen
           name="Football"
           component={Home}
           options={({route, navigation}) => ({
-            headerTitle: () => (
-              <HeaderTitle
-                setOpen={() => navigation.navigate('MyModal')}
-                // @ts-ignore
-                routeName={route.params?.title || 'Football'}
-              />
+            header: () => (
+              <>
+                <NavigationCustomHeader
+                  connection={connection}
+                  onLeftIconPress={() => navigation.openDrawer()}
+                  onRightIconPress={() => setVisibleModal(true)}
+                  onTitlePress={
+                    getFocusedRouteNameFromRoute(route) === 'Favourites'
+                      ? undefined
+                      : () => navigation.navigate('MyModal')
+                  }
+                  title={
+                    getFocusedRouteNameFromRoute(route) === 'Favourites'
+                      ? t('bottomMenu.favourites')
+                      : t(
+                          `sportsPage.sportList.${
+                            // @ts-ignore
+                            route.params?.title || 'a2804112'
+                          }`,
+                        )
+                  }
+                  bgImage="participants/UY4rS7dgnMJYKxreKfh4AXyocneLtw5XL6xz1er4LmvpzRp4WG.jpeg"
+                  leftIconName={'menu'}
+                  rightIconName={
+                    getFocusedRouteNameFromRoute(route) === 'Favourites'
+                      ? 'trash'
+                      : undefined
+                  }
+                />
+                {visibleModal && (
+                  <FavouritesTrashModal
+                    setVisible={() => setVisibleModal(false)}
+                  />
+                )}
+              </>
             ),
-            headerLeft: () => (
-              <Pressable
-                style={[{marginRight: 10}]}
-                onPress={() => navigation.openDrawer()}>
-                <Icon name="menu" size={30} color={colors.black} />
-              </Pressable>
-            ),
-            headerRight: () =>
-              getFocusedRouteNameFromRoute(route) === 'Favourites' ? (
-                <>
-                  <TouchableOpacity onPress={() => setVisibleModal(true)}>
-                    <Icon name="trash" size={25} color={colors.black} />
-                  </TouchableOpacity>
-                  {visibleModal && (
-                    <FavouritesTrashModal
-                      setVisible={() => setVisibleModal(false)}
-                    />
-                  )}
-                </>
-              ) : undefined,
           })}
         />
-        <Stack.Screen name="EditPost" component={NotificationsScreen} />
+        <Stack.Screen
+          name="Match"
+          options={({route, navigation}) => ({
+            headerTintColor: colors.white,
+            headerStyle: {
+              backgroundColor: colors.darkBlueOpacity,
+            },
+            headerBackVisible: false,
+            header: () => (
+              <NavigationCustomMatchHeader
+                connection={connection}
+                // @ts-ignore
+                bgImage={route.params?.item.bg_image}
+                leftIconName="arrow-back"
+                // @ts-ignore
+                title={route.params?.title}
+                rightAwesomeIconName="star"
+                // @ts-ignore
+                item={route.params?.item}
+                onLeftIconPress={() =>
+                  navigation.getState().routes[0].name === 'Splash' &&
+                  navigation.getState().routes.length === 2
+                    ? navigation.replace('Football')
+                    : navigation.goBack()
+                }
+              />
+            ),
+          })}
+          component={MatchScreen}
+        />
+        <Stack.Screen
+          name="Stream"
+          options={({route, navigation}) => ({
+            header: () => (
+              <NavigationCustomHeader
+                connection={connection}
+                // @ts-ignore
+                bgImage={route.params?.item.bg_image}
+                leftIconName="arrow-back"
+                // @ts-ignore
+                title={route.params?.title}
+                onLeftIconPress={() => navigation.goBack()}
+              />
+            ),
+          })}
+          component={StreamScreen}
+        />
+        <Stack.Screen
+          name="League"
+          options={({route, navigation}) => ({
+            header: () => (
+              <NavigationCustomHeader
+                connection={connection}
+                // @ts-ignore
+                image={route.params?.image}
+                bgImage={
+                  // @ts-ignore
+                  route.params?.image?.[0] === '/'
+                    ? // @ts-ignore
+                      route.params?.image.slice(0, route.params?.image.length)
+                    : // @ts-ignore
+                      route.params?.image
+                }
+                leftIconName="arrow-back"
+                // @ts-ignore
+                title={route.params?.title}
+                onLeftIconPress={() => navigation.goBack()}
+              />
+            ),
+          })}
+          component={LeagueScreen}
+        />
+        <Stack.Screen
+          name="TeamScreen"
+          options={({route, navigation}) => ({
+            header: () => (
+              <NavigationCustomHeader
+                connection={connection}
+                // @ts-ignore
+                image={route.params?.image}
+                bgImage={
+                  // @ts-ignore
+                  route.params?.image?.[0] === '/'
+                    ? // @ts-ignore
+                      route.params?.image.slice(0, route.params?.image.length)
+                    : // @ts-ignore
+                      route.params?.image
+                }
+                leftIconName="arrow-back"
+                // @ts-ignore
+                title={route.params?.title}
+                onLeftIconPress={() => navigation.goBack()}
+              />
+            ),
+          })}
+          component={teamScreen}
+        />
       </Stack.Group>
       <Stack.Group screenOptions={{presentation: 'modal'}}>
         <Stack.Screen
@@ -187,29 +341,20 @@ function MainPage() {
   );
 }
 
-function CustomDrawerContent(props: any) {
-  return (
-    <DrawerContentScrollView {...props}>
-      {/*<DrawerItemList {...props} />*/}
-      <DrawerMenu />
-    </DrawerContentScrollView>
-  );
-}
-
 const App = () => {
-  const ddd = () => {
-    console.log('ddd');
+  const {i18n} = useTranslation();
+  const createChannel = () => {
     PushNotification.createChannel(
       {
-        channelId: 'channel-id', // (required)
-        channelName: 'My channel', // (required)
-        channelDescription: 'A channel to categorise your notifications', // (optional) default: undefined.
-        playSound: false, // (optional) default: true
-        soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
-        importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
-        vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
+        channelId: 'channel-id',
+        channelName: 'My channel',
+        channelDescription: 'A channel to categorise your notifications',
+        playSound: false,
+        soundName: 'default',
+        importance: Importance.HIGH,
+        vibrate: true,
       },
-      created => console.log(`createChannel returned '${created}'`), // (optional) callback returns whether the channel was created, false means it already existed.
+      created => console.log(`createChannel returned '${created}'`),
     );
   };
   const [{allSports}, setAllSports] = useState(InitialState);
@@ -217,10 +362,10 @@ const App = () => {
   const [{locale}, setLocale] = useState(InitialState);
   const [{currentSport}, setCurrentSport] = useState(InitialState);
   const [{favourites}, setFavourites] = useState(InitialState);
-  useEffect(() => {
-    sportsRepository.fetchAllSports().then(res => handleSetAllSports(res));
-    ddd();
-  }, []);
+  const [{isChecked}, setIsChecked] = useState(InitialState);
+  const [visibleUpdatesModal, setVisibleUpdatesModal] = useState(false);
+  const [description, setDescription] = useState<string>('');
+
   const handleSetTimeZone = (ms: number) =>
     setTimeZone(state => ({...state, differanceTimeZoneInMs: ms}));
   const handleSetAllSports = (all: ISports[]) =>
@@ -234,21 +379,64 @@ const App = () => {
     }));
   const handleSetFavourites = (fav: IEvent[]) =>
     setFavourites(state => ({...state, favourites: fav}));
-  // const {t} = useTranslation();
+  const handleSetIsChecked = (checked: boolean) =>
+    setIsChecked(state => ({...state, isChecked: checked}));
 
-  const readData = async () => {
+  const readFavourites = async () => {
     try {
-      const value = await AsyncStorage.getItem(currentSport);
+      const value = await AsyncStorage.getItem('favourites');
       handleSetFavourites(
         value !== null ? endMatchFilterFunc(JSON.parse(value)) : [],
       );
     } catch (e) {}
   };
 
+  const readLocale = async () => {
+    try {
+      const value = await AsyncStorage.getItem('locale');
+      handleSetLocale(value !== null ? value : 'en');
+      i18n.changeLanguage(value !== null ? value : 'en').then();
+    } catch (e) {}
+  };
+
+  const readIsChecked = async () => {
+    try {
+      const value = await AsyncStorage.getItem('checked');
+      handleSetIsChecked(value === 'true');
+    } catch (e) {}
+  };
+
   useEffect(() => {
-    readData();
+    sportsRepository.fetchAllSports().then(res => {
+      handleSetCurrentSport(
+        res.find(el => el.name === 'Football')?.og_url || '',
+      );
+      handleSetAllSports(
+        res.filter(
+          el =>
+            el.uuid !== 'e40a045d' &&
+            el.uuid !== '57f045a7' &&
+            el.uuid !== 'a0bb958f' &&
+            el.uuid !== 'cbe8de34' &&
+            el.uuid !== '56558a62' &&
+            el.uuid !== 'f8d039e1',
+        ),
+      );
+    });
+    createChannel();
+    readLocale();
+    readFavourites();
+    readIsChecked();
+    SplashScreen.hide();
+    Orientation.unlockAllOrientations();
+    versionRepository.fetchVersion().then(res => {
+      if (res.version !== DeviceInfo.getVersion()) {
+        setVisibleUpdatesModal(true);
+        setDescription(res.description || '');
+      }
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentSport]);
+  }, []);
 
   return (
     <InitialStateContext.Provider
@@ -263,8 +451,17 @@ const App = () => {
         setCurrentSport: handleSetCurrentSport,
         favourites,
         setFavourites: handleSetFavourites,
+        isChecked,
+        setIsChecked: handleSetIsChecked,
       }}>
-      <NavigationContainer>
+      <StatusBar backgroundColor={colors.darkBlue} />
+      {visibleUpdatesModal && (
+        <NeedUpdateModal
+          description={description}
+          setVisible={() => setVisibleUpdatesModal(false)}
+        />
+      )}
+      <NavigationContainer ref={navigationRef}>
         <Drawer.Navigator
           initialRouteName="HomeScreen"
           useLegacyImplementation
@@ -273,13 +470,12 @@ const App = () => {
               backgroundColor: colors.darkBlue,
             },
           }}
-          drawerContent={props => <CustomDrawerContent {...props} />}>
+          drawerContent={props => <DrawerMenu {...props} />}>
           <Drawer.Screen
             name="HomeScreen"
             component={MainPage}
             options={{headerShown: false}}
           />
-          <Drawer.Screen name="Notifications" component={NotificationsScreen} />
         </Drawer.Navigator>
       </NavigationContainer>
     </InitialStateContext.Provider>
@@ -287,7 +483,3 @@ const App = () => {
 };
 
 export default App;
-
-const styles = StyleSheet.create({
-  burger: {},
-});

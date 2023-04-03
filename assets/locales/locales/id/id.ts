@@ -1,145 +1,145 @@
 import {en} from '../en/en';
 
 export const id: typeof en = {
-  header: {
-    placeholder: 'Mencari',
-    subscribe: 'Langganan',
-    tabs: {
-      dns: 'DNS',
-      webmasters: 'WEB',
-      webmastersShort: 'WEB',
-    } as Record<string, string>,
-    liveStreams: 'Siaran langsung',
-    addStream: 'Tambahkan arus Anda',
-    navbar: {
-      other: 'Lainnya',
+  bottomMenu: {
+    matches: 'Cocok',
+    leagues: 'Liga',
+    favourites: 'Favorit',
+  },
+  matchesPage: {
+    noInternetConnection: 'Tidak ada koneksi internet',
+    topMatchesTitle: 'Pertandingan Teratas',
+    vs: 'VS',
+    live: 'Hidup',
+    noDataTitle: 'Tidak ada acara hari ini',
+    noDataDescription: 'Kembalilah besok atau pilih olahraga lain',
+    showNextDayEvents: 'Tampilkan acara hari berikutnya',
+    modal: {
+      title: 'Ditambahkan ke favorit',
+      description: 'Anda akan diberi tahu saat acara ini dimulai',
+      checkBox: 'Jangan tampilkan pesan ini lagi',
+      buttons: {
+        settings: 'Pengaturan',
+        success: 'Baik',
+      },
     },
   },
-  layout: {
-    noMatchesFound: {
-      title: 'Tidak ditemukan kecocokan',
-      description:
-        'Maaf, tidak ada kecocokan yang ditemukan untuk pencarian Anda',
+  updateModal: {
+    title: 'Versi baru sudah tersedia!',
+    download: 'Unduh',
+    description: {
+      first: 'Memperbaiki bug berikut:',
     },
-    chatIsLoading: 'Obrolan sedang dimuat',
-    chatButtons: {
-      hide: 'Bersembunyi',
-      adv: 'Lanjut',
-      chat: 'Mengobrol',
-      tgChat: 'Obrolan tg',
-    } as Record<string, string>,
-    liveStreams: 'Streaming langsung',
   },
-  footer: {
-    'football-live-stream': 'Sepak bola',
-    basketball: 'Bola basket',
-    tennis: 'Tenis',
-    'american-football': 'Sepak Bola Amerika',
-  } as Record<string, string>,
-  forWebMastersPage: {
-    breadCrumbs: 'Tambahkan Arus Anda',
-    title: 'Tautan Streaming Video Langsung untuk Webmaster!',
-    putStream: 'Tempatkan Widget Aliran Olahraga kami di situs web Anda.',
-    copyPaste: 'Cukup salin/tempel kode ini ke halaman Anda:',
-    copyPasteGenerated: 'Salin/tempel kode yang dihasilkan ke halaman Anda:',
-    seeExample: 'Klik di sini untuk melihat contoh (Tampilan Standar)',
-    customize:
-      'Jika Anda perlu menyesuaikan tata letak Anda, gunakan formulir di bawah ini\n:',
-    allSports: 'Semua olahraga',
-    settings: {
-      sports: 'Olahraga:',
-      showLive: 'Tampilkan langsung:',
-      timeZone: 'Zona waktu:',
+  pushNotifications: {
+    notification: {
+      title: 'Aplikasi yang diperbarui berhasil diunduh.',
+      message: 'Buka unduhan dan perbarui aplikasi.',
     },
-    preview: 'Pratinjau:',
+    scheduleNotification: {
+      title: 'Pertandingan sudah dimulai.',
+      message:
+        'Jangan lewatkan streaming langsung {{homeTeam}} vs {{awayTeam}} dari {{league}} League.',
+    },
   },
-  dnsPage: {
-    headerSpan:
-      'Untuk mengubah pengaturan DNS di Windows 10 menggunakan Panel Kontrol, gunakan langkah-langkah ini:',
-    olList1: {
-      1: 'Buka Panel Kontrol.',
-      2: 'Klik Jaringan dan Internet.',
-      3: 'Klik Jaringan dan Pusat Berbagi.',
-      4: 'Klik opsi Ubah pengaturan adaptor di panel kiri.',
-      5: `Klik kanan antarmuka jaringan yang menghubungkan Windows 10 ke internet, dan pilih opsi Properties.<br/>
-          Kiat cepat: Anda akan tahu adaptor mana yang terhubung ke jaringan karena tidak ada label "Nonaktif" atau "Kabel jaringan dicabut".`,
-      6: 'Pilih dan centang opsi Internet Protocol Version 4 (TCP/IPv4).',
-      7: 'Klik tombol Properti.',
-      8: 'Pilih opsi Gunakan alamat server DNS berikut.',
-      9: `Ketikkan alamat DNS "pilihan" dan "alternatif" Anda.<br />
-          Jika Anda ingin menggunakan Cloudflare, Google Public DNS, atau Cisco OpenDNS, Anda dapat menggunakan pengaturan ini:`,
-    } as Record<string, string>,
-    ulList: {
-      1: 'Cloudflare: 1.1.1.1 and 1.0.0.1',
-      2: 'Google Public DNS: 8.8.8.8 and 8.8.4.4',
-      3: 'Google Public DNS: 8.8.8.8 and 8.8.4.4',
-      4: 'OpenDNS: 208.67.222.222 and 208.67.220.220',
-    } as Record<string, string>,
-    olList2: {
-      10: '(Opsional) Klik tombol Lanjutan',
-      11: 'Klik tab DNS.',
-      12: 'Klik tombol Tambah.',
-      13: 'Tentukan alamat server DNS alternatif.',
-      14: 'Klik tombol Tambah.',
-      15: 'Klik tombol OK.',
-      16: 'Klik tombol Tutup.',
-    } as Record<string, string>,
+  leaguesPage: {
+    noDataTitle: 'Tidak ada liga hari ini',
+    placeholder: 'Pilih liga Anda',
   },
-  developmentPage: {
-    breadCrumbs: 'Dalam Pengembangan',
-    title: 'Halaman dalam pengembangan',
-    description:
-      'Maaf, halaman ini sedang dalam pengembangan. Anda akan segera dapat menambahkan aliran Anda, terima kasih!',
+  favoritesPage: {
+    noDataTitle: 'Pertandingan favorit tidak dipilih',
+    noDataDescription:
+      'Anda belum memilih acara apa pun untuk olahraga saat ini',
+    trashModal: {
+      empty: {
+        title: 'Favorit kosong',
+        description: 'Tidak ada yang perlu dibersihkan',
+      },
+      full: {
+        title: 'Favorit akan dihapus',
+        description: 'Apakah Anda yakin ingin menghapus favorit?',
+      },
+      clear: 'Jernih',
+      cancel: 'Membatalkan',
+    },
+  },
+  leaguePage: {
+    noDataTitle: 'Tidak ada acara dari liga ini',
+    noDataDescription: 'Kembalilah besok atau pilih liga lain',
   },
   matchPage: {
+    aboutMatch: 'Tentang Pertandingan',
+    watch: 'Jam tangan',
     link: 'Tautan',
-    players: {
-      flash: 'Kilatan',
-      youtube: 'Youtube',
-    } as Record<string, string>,
-    timer: {
-      afterCountDays: 'Dalam {{dayN}} hari',
-    },
+    streams: 'Aliran',
   },
-  gamePage: {
-    topMatches: {
-      title: 'Pertandingan Teratas',
-      vs: 'vs',
-    },
-    noData: 'Tidak ada data',
-    live: 'Hidup',
-    watch: 'Menonton',
-    scrollToTop: 'Gulir ke atas',
-    loadMore: 'Muat lebih banyak',
-    allCompetitions: 'Semua kompetisi',
-    favourites: {
-      title: 'Favorit',
-      clearAll: 'Bersihkan semua',
-    },
+  streamPage: {
+    aboutStream: 'Tentang Aliran',
+    stream: 'Sungai kecil',
   },
-  worldCupPage: {
-    buttons: {
-      groups: 'Grup',
-      knockOut: 'Pukulan knockout',
+  sportsPage: {
+    placeholder: 'Pilih olahraga Anda',
+    sportList: {
+      '57f045a7': 'Jolly Joker',
+      '07753fa6': 'Liga kejuaraan UEFA',
+      '0d30db42': 'Australia Terbuka',
+      '7281de84': 'NBA',
+      a0bb958f: 'Piala Dunia 2022',
+      a2804112: 'Sepak bola',
+      '9d321bb2': 'Tenis',
+      a63b8aa9: 'NFL',
+      bbf55c8b: 'Bola basket',
+      ec2cdc35: 'Motorsport',
+      '842edfba': 'Hoki es',
+      '3b61c93e': 'Ragbi',
+      d1d654cc: 'Bola tangan',
+      '3f7a342d': 'UFC',
+      '15d93549': 'Bola voli',
+      f415efb9: 'Tinju',
+      '00e28ace': 'Baseball',
+      '4d2379e1': 'Tenis meja',
+      '48ac0404': 'E-sports',
+      '37e7527d': 'Jangkrik',
+      '034ddd3b': 'Berkelahi',
+      d833d957: 'Panahan',
+      '9b0d82f3': 'Futsal',
+      '362b67c6': 'Bulu tangkis',
+      '123eed67': 'Voli pantai',
+      eb386a00: 'Aturan Aussie',
+      f092ac00: 'Hoki Lapangan',
+      '2e3ab599': 'Waterpolo',
+      da3972e1: 'Atletik',
+      cf603120: 'Floorball',
+      '5d9a63a9': 'Bersepeda',
+      '3306f86d': 'Snooker',
+      '3c3e36c2': 'Olahraga senam',
+      95917238: 'Golf',
+      '5848c23a': 'Netball',
+      e2a30c9d: 'Pendakian',
+      '6cca0cad': 'Olahraga musim dingin',
+      '472dcae2': 'Judo',
+      '147369e2': 'Bengkok',
+      '652aceb6': 'Powerlifting',
+      '0e59cd27': 'Olahraga Air',
+      '2b9824c6': 'Taekwondo',
+      '74be752b': 'Labu',
     } as Record<string, string>,
-    groupsHeader: {
-      P: 'B',
-      W: 'M',
-      D: 'S',
-      L: 'K',
-      goals: 'Sasaran',
-      points: 'Poin',
-    } as Record<string, string>,
-    knockOutFormulations: {
-      '1/8': '1/8',
-      '1/4': '1/4',
-      '1/2': '1/2',
-      quarterfinals: 'Perempat final',
-      semifinals: 'Semifinal',
-      final: 'Terakhir',
-    } as Record<string, string>,
-    title: 'Streaming Langsung Piala Dunia',
-    breadCrumbs: 'Streaming Langsung Piala Dunia 2022',
+  },
+  teamPage: {
+    info: 'Info',
+    venue: 'Lokasi',
+    tournaments: 'Turnamen',
+    coach: 'Pelatih',
+    foundationDate: 'Tanggal yayasan',
+    country: 'Negara',
+    stadium: 'Stadion',
+    capacity: 'Kapasitas',
+    city: 'Kota',
+    tabs: {
+      details: 'Detail',
+      feature: 'Perlengkapan',
+      past: 'Hasil',
+    },
   },
   monthList: {
     default: {

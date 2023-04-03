@@ -1,0 +1,17 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/icomoon.ttf",
+      "sha1": "aaf1327c566071a94e0d9bbd4e7da5854aedf281"
+    },
+    {
+      "path": "assets/fonts/Rubik-Bold.ttf",
+      "sha1": "6c52238fe8c885c62b5a92520557066d1e1279eb"
+    },
+    {
+      "path": "assets/fonts/Rubik-Regular.ttf",
+      "sha1": "3b681bad0af19fdd24a1f302a19dcd4df150da89"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "432568764473",
+    "project_id": "jokerlivastream",
+    "storage_bucket": "jokerlivastream.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:432568764473:android:d7861ff4a9485c9de3e5e8",
+        "android_client_info": {
+          "package_name": "com.jokerlivestream"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "432568764473-lidedvqagad1cvai2lvbiettb09gr06f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDn130OVHRwvfQ2GjWpYlZOJ6SQzlOllLA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "432568764473-lidedvqagad1cvai2lvbiettb09gr06f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

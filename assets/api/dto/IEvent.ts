@@ -1,3 +1,11 @@
+interface IScore {
+  et_score: string;
+  ft_score: string;
+  pen_score: string;
+  score: string;
+  uuid: string;
+}
+
 export interface IEvent {
   use_league_logo: 'true' | 'false';
   hasParticipants: 'true' | 'false';
@@ -16,11 +24,16 @@ export interface IEvent {
   league_location_uuid: string;
   participant_1_name: string;
   participant_1_logo: string;
+  participant_1_uuid: string;
   participant_2_name: string;
   participant_2_logo: string;
+  participant_2_uuid: string;
   name: string;
   flag: string;
   bg_image: string;
+  participantAwayScore?: IScore;
+  participantHomeScore?: IScore;
+  halftime_score?: string;
 }
 
 export interface ITopMatches {
@@ -31,4 +44,5 @@ export interface ITopMatches {
 export interface IPostPage {
   league_uuid?: string;
   sport_og_url?: string;
+  lang: string;
 }

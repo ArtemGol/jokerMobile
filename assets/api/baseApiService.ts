@@ -42,6 +42,6 @@ export class BaseApiService {
           .catch();
 
   private handleError = async (requestError?: unknown, res?: Response) => {
-    console.log(res);
+    console.log('error', res);
   };
 }

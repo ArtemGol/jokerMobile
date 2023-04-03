@@ -7,13 +7,13 @@ import {
   View,
 } from 'react-native';
 import {colors} from '../../../../assets/colors/colors';
-import {DropDownIcon} from '../../../../assets/icons/dropDownIcon';
 import {useContext, useEffect, useState} from 'react';
 import {options} from '../../../../assets/constants/mockHeaderOptions';
 import {DropDownModalLayout} from './components/dropDownModalLayout';
 import {InitialStateContext} from '../../../../App';
 import {formatDate} from '../../../../assets/constants/date';
-import {ClockIcon} from '../../../../assets/icons/clockIcon';
+import Icon from 'react-native-vector-icons/EvilIcons';
+import IconAwasome from 'react-native-vector-icons/FontAwesome5';
 
 export const HeaderDropDown = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -52,11 +52,12 @@ export const HeaderDropDown = () => {
   return (
     <View style={styles.container}>
       <Pressable onPress={() => setOpen(!open)} style={styles.GTMBlock}>
-        <ClockIcon />
+        <IconAwasome name="clock" size={20} color={colors.blue.DEFAULT} />
         <Text style={styles.GTM}>{active?.name}</Text>
-        <DropDownIcon
-          propStyles={{transform: [{rotate: open ? '-90deg' : '90deg'}]}}
-          stroke={colors.white}
+        <Icon
+          name={open ? 'chevron-up' : 'chevron-down'}
+          size={25}
+          color={colors.white}
         />
         {open && (
           <DropDownModalLayout
@@ -154,6 +155,6 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontFamily: 'Rubik-Regular',
     fontSize: 14,
-    marginRight: 10,
+    marginLeft: 10,
   },
 });

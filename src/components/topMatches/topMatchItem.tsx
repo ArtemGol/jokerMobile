@@ -1,4 +1,10 @@
-import {ImageBackground, StyleSheet, Text, View} from 'react-native';
+import {
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {colors} from '../../../assets/colors/colors';
 import type {IEvent} from '../../../assets/api/dto/IEvent';
 import {formatDate} from '../../../assets/constants/date';
@@ -7,6 +13,7 @@ import {CustomImage} from '../customImage/customImage';
 import {useTranslation} from 'react-i18next';
 import {useContext} from 'react';
 import {InitialStateContext} from '../../../App';
+import {useNavigation} from '@react-navigation/native';
 
 const TeamBlock = ({teamLogo}: {teamLogo: string}) => (
   <View style={styles.teamBlock}>
@@ -24,6 +31,7 @@ interface IProps {
 }
 
 export const TopMatchItem = ({event, last}: IProps) => {
+  const navigation = useNavigation();
   const {t} = useTranslation();
   const {differanceTimeZoneInMs} = useContext(InitialStateContext);
   const isLive = isLiveFunc(event.start_time, event.end_time);
@@ -35,7 +43,13 @@ export const TopMatchItem = ({event, last}: IProps) => {
         uri: `https://assets.jokerlivestream.vip/${event.bg_image}`,
       }}
       style={last ? {} : {marginRight: 10}}>
-      <View
+      <TouchableOpacity
+        onPress={() =>
+          navigation
+            .getParent()
+            ?.navigate('Match', {title: 'About Match', item: event})
+        }
+        activeOpacity={0.8}
         style={[
           styles.container,
           isLive && {borderWidth: 2, borderColor: colors.violet},
@@ -61,7 +75,7 @@ export const TopMatchItem = ({event, last}: IProps) => {
                 textTransform: 'uppercase',
               },
             ]}>
-            {t('gamePage.topMatches.vs')}
+            {t('matchesPage.vs')}
           </Text>
           <TeamBlock teamLogo={event.participant_2_logo} />
         </View>
@@ -87,7 +101,7 @@ export const TopMatchItem = ({event, last}: IProps) => {
                   styles.dateText,
                   {fontFamily: 'Rubik-Bold', marginLeft: 5},
                 ]}>
-                {t('gamePage.live')}
+                {t('matchesPage.live')}
               </Text>
             </>
           ) : (
@@ -112,7 +126,7 @@ export const TopMatchItem = ({event, last}: IProps) => {
             </>
           )}
         </View>
-      </View>
+      </TouchableOpacity>
     </ImageBackground>
   );
 };

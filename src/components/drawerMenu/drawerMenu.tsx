@@ -3,34 +3,21 @@ import {StyleSheet, View} from 'react-native';
 import {colors} from '../../../assets/colors/colors';
 import {LocationsDropdown} from '../header/headerDropDown/locationsDropdown';
 import {HeaderDropDown} from '../header/headerDropDown/headerDropDown';
-import {CustomButton} from '../customButton/customButton';
-import {AddIcon} from '../../../assets/icons/addIcon';
-import {useTranslation} from 'react-i18next';
+import {DrawerContentScrollView} from '@react-navigation/drawer';
 
-export const DrawerMenu = () => {
-  const {t} = useTranslation();
+const DrawerMenu = (props: any) => {
   return (
-    <View style={styles.container}>
-      <HeaderDropDown />
-      <LocationsDropdown />
-      <CustomButton
-        text={t('header.addStream')}
-        blockStyles={{
-          backgroundColor: colors.green,
-          marginTop: 10,
-          marginBottom: 10,
-        }}
-        textStyles={{color: colors.white}}
-        icon={<AddIcon fill={colors.green} />}
-      />
-      <CustomButton
-        text={t('header.subscribe')}
-        blockStyles={{backgroundColor: colors.white}}
-        textStyles={{color: colors.black}}
-      />
-    </View>
+    <DrawerContentScrollView {...props}>
+      {/*<DrawerItemList {...props} />*/}
+      <View style={styles.container}>
+        <HeaderDropDown />
+        <LocationsDropdown />
+      </View>
+    </DrawerContentScrollView>
   );
 };
+
+export default DrawerMenu;
 
 const styles = StyleSheet.create({
   container: {
