@@ -120,6 +120,9 @@ export const en = {
       '0e59cd27': 'Water Sports',
       '2b9824c6': 'Taekwondo',
       '74be752b': 'Squash',
+      '39c497e9': 'MLB',
+      '4f452860': 'NHL',
+      d4d986e8: 'NFL',
     } as Record<string, string>,
   },
   teamPage: {

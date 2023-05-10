@@ -133,7 +133,9 @@ const MatchScreen = ({route, navigation}: {route: any; navigation: any}) => {
           streamState?.map(elem =>
             Object.entries(elem.collection)
               .filter(
-                ([key]) => key !== 'JokerHDpass - HD ads free streams only!',
+                ([key, value]) =>
+                  key !== 'JokerHDpass - HD ads free streams only!' &&
+                  value.some(el => el.description !== 'zuzz'),
               )
               .map(([key, value], i) => (
                 <View key={key + i}>

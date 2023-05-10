@@ -122,6 +122,9 @@ export const zh: typeof en = {
       '0e59cd27': '水上运动',
       '2b9824c6': '跆拳道',
       '74be752b': '壁球',
+      '39c497e9': 'MLB',
+      '4f452860': 'NHL',
+      d4d986e8: 'NFL',
     } as Record<string, string>,
   },
   teamPage: {

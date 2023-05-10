@@ -419,7 +419,10 @@ const App = () => {
             el.uuid !== 'a0bb958f' &&
             el.uuid !== 'cbe8de34' &&
             el.uuid !== '56558a62' &&
-            el.uuid !== 'f8d039e1',
+            el.uuid !== 'f8d039e1' &&
+            el.uuid !== 'a45a75ad' &&
+            el.uuid !== '4b9f2101' &&
+            el.uuid !== '4c99d961',
         ),
       );
     });

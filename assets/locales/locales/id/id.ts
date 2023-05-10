@@ -123,6 +123,9 @@ export const id: typeof en = {
       '0e59cd27': 'Olahraga Air',
       '2b9824c6': 'Taekwondo',
       '74be752b': 'Labu',
+      '39c497e9': 'MLB',
+      '4f452860': 'NHL',
+      d4d986e8: 'NFL',
     } as Record<string, string>,
   },
   teamPage: {

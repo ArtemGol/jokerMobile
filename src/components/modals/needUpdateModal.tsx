@@ -21,7 +21,7 @@ interface IProps {
 export const NeedUpdateModal = ({setVisible, description}: IProps) => {
   const [isLoad, setIsLoad] = useState(false);
   const fileUrl =
-    'https://assets.jokerlivestream.vip/app/android/jokerlivestream-app.apk?v=9';
+    'https://assets.jokerlivestream.vip/app/android/jokerlivestream-app.apk?v=11';
 
   const checkPermission = async () => {
     try {
