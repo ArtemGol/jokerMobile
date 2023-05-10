@@ -123,6 +123,9 @@ export const ru: typeof en = {
       '0e59cd27': 'Водные виды спорта',
       '2b9824c6': 'Тхэквондо',
       '74be752b': 'Сквош',
+      '39c497e9': 'МЛБ',
+      '4f452860': 'НХЛ',
+      d4d986e8: 'НФЛ',
     } as Record<string, string>,
   },
   teamPage: {
