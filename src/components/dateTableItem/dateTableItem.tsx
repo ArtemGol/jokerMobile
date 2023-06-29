@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import {colors} from '../../../assets/colors/colors';
-import type {IEvent} from '../../../assets/api/dto/IEvent';
+import type {IEvent} from '../../../assets/api/dto/IMatch';
 import {formatDate} from '../../../assets/constants/date';
 import {CustomImage} from '../customImage/customImage';
 import {isLiveFunc} from '../../../assets/constants/isLiveFunc';
@@ -158,15 +158,19 @@ const DateTableItem = ({item, setVisibleModal, listType}: IProps) => {
             <CustomImage
               imageStyles={styles.leagueImage}
               src={
-                item.use_league_logo === 'true' ? item.league_logo : item.flag
+                item.league.use_league_logo === 'true'
+                  ? item.league.logo
+                  : item.location.flag
               }
               src2={
-                item.use_league_logo === 'true' ? item.flag : item.league_logo
+                item.league.use_league_logo === 'true'
+                  ? item.location.flag
+                  : item.league.logo
               }
               mockImg={require('../../../assets/images/mockLogos/noLeague.png')}
             />
             <Text style={styles.leagueText} numberOfLines={1}>
-              {item.name} - {item.league_name}
+              {item.location.name} - {item.league.name}
             </Text>
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -196,21 +200,21 @@ const DateTableItem = ({item, setVisibleModal, listType}: IProps) => {
               {item?.hasParticipants === 'true' ? (
                 <>
                   <TeamBlock
-                    score={item.participantHomeScore?.score}
-                    teamName={item.participant_1_name}
-                    teamLogo={item.participant_1_logo}
+                    score={item.participantHome?.score}
+                    teamName={item.participantHome.name}
+                    teamLogo={item.participantHome.logo}
                     propsStyles={{marginBottom: 5}}
                   />
                   <TeamBlock
-                    score={item.participantAwayScore?.score}
-                    teamName={item.participant_2_name}
-                    teamLogo={item.participant_2_logo}
+                    score={item.participantAway?.score}
+                    teamName={item.participantAway.name}
+                    teamLogo={item.participantAway.logo}
                   />
                 </>
               ) : (
                 <TeamBlock
                   teamName={item.event_title}
-                  teamLogo={item.league_logo}
+                  teamLogo={item.league.logo}
                 />
               )}
             </View>

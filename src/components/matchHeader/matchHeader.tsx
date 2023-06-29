@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import {colors} from '../../../assets/colors/colors';
-import type {IEvent} from '../../../assets/api/dto/IEvent';
+import type {IEvent} from '../../../assets/api/dto/IMatch';
 import {formatDate} from '../../../assets/constants/date';
 import {CustomImage} from '../customImage/customImage';
 import {useTranslation} from 'react-i18next';
@@ -71,27 +71,27 @@ export const MatchHeader = ({event}: IProps) => {
         <TouchableOpacity
           onPress={() =>
             navigation.getParent()?.navigate('League', {
-              title: event.league_name,
-              image: event.league_logo,
-              leagueId: event.league_uuid,
+              title: event.league.name,
+              image: event.league.logo,
+              leagueId: event.league.uuid,
             })
           }
           style={styles.leagueBlock}>
           <CustomImage
-            src={event.league_logo}
-            src2={event.flag}
+            src={event.league.logo}
+            src2={event.location.flag}
             imageStyles={styles.leagueImage}
             mockImg={require('../../../assets/images/mockLogos/noLeague.png')}
           />
           <Text numberOfLines={1} style={styles.leagueText}>
-            {event.league_name}
+            {event.league.name}
           </Text>
         </TouchableOpacity>
         <View style={styles.teamsBlock}>
           <TeamBlock
-            teamId={event.participant_1_uuid}
-            teamLogo={event.participant_1_logo}
-            teamName={event.participant_1_name}
+            teamId={event.participantHome.uuid}
+            teamLogo={event.participantHome.logo}
+            teamName={event.participantHome.name}
           />
           {isMatchStart || isMatchEnd || isLiveState ? (
             <View
@@ -101,13 +101,13 @@ export const MatchHeader = ({event}: IProps) => {
               }}>
               <View style={styles.scoreSquareBlock}>
                 <Text style={styles.scoreSquare}>
-                  {event.participantHomeScore?.score || '-'}
+                  {event.participantHome?.score || '-'}
                 </Text>
                 <Text style={{fontFamily: 'Rubik-Bold', color: colors.white}}>
                   :
                 </Text>
                 <Text style={styles.scoreSquare}>
-                  {event.participantAwayScore?.score || '-'}
+                  {event.participantAway?.score || '-'}
                 </Text>
               </View>
               {event?.halftime_score ? (
@@ -124,9 +124,9 @@ export const MatchHeader = ({event}: IProps) => {
             />
           )}
           <TeamBlock
-            teamId={event.participant_2_uuid}
-            teamLogo={event.participant_2_logo}
-            teamName={event.participant_2_name}
+            teamId={event.participantAway.uuid}
+            teamLogo={event.participantAway.logo}
+            teamName={event.participantAway.name}
           />
         </View>
         <View

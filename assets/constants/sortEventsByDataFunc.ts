@@ -1,4 +1,4 @@
-import {IEvent} from '../api/dto/IEvent';
+import {IEvent} from '../api/dto/IMatch';
 
 export const sortEventsByDataFunc = (sortArray: IEvent[]) =>
   sortArray.sort(

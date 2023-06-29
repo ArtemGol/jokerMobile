@@ -72,6 +72,7 @@ export const id: typeof en = {
     watch: 'Jam tangan',
     link: 'Tautan',
     streams: 'Aliran',
+    afterCountDays: 'Dalam {{count}} hari',
   },
   streamPage: {
     aboutStream: 'Tentang Aliran',
@@ -128,6 +129,7 @@ export const id: typeof en = {
       d4d986e8: 'NFL',
     } as Record<string, string>,
   },
+
   teamPage: {
     info: 'Info',
     venue: 'Lokasi',

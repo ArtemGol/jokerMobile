@@ -1,4 +1,4 @@
-import type {IEvent} from '../api/dto/IEvent';
+import type {IEvent} from '../api/dto/IMatch';
 
 export const endMatchFilterFunc = (filterEvents: IEvent[]) =>
   filterEvents.filter(

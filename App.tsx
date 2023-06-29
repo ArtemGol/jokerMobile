@@ -29,7 +29,7 @@ import MatchesScreen from './src/components/matchesScreen/matchesScreen';
 import LeaguesScreen from './src/components/leaguesScreen/leaguesScreen';
 import FavouritesScreen from './src/components/favouritesScreen/favouritesScreen';
 import {FavouritesTrashModal} from './src/components/modals/favouritesTrashModal';
-import {IEvent} from './assets/api/dto/IEvent';
+import {IEvent} from './assets/api/dto/IMatch';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {endMatchFilterFunc} from './assets/constants/endMatchFilterFunc';
 import PushNotification, {Importance} from 'react-native-push-notification';

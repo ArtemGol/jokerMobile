@@ -8,10 +8,10 @@ import {RefreshControl, View} from 'react-native';
 import {colors} from '../../../../assets/colors/colors';
 import {InitialStateContext} from '../../../../App';
 import {useTranslation} from 'react-i18next';
-import type {IEvent} from '../../../../assets/api/dto/IEvent';
+import type {IEvent} from '../../../../assets/api/dto/IMatch';
 import {teamRepository} from '../../../../assets/api/teamRepository';
-import {endMatchFilterFunc} from '../../../../assets/constants/endMatchFilterFunc';
 import NetInfo from '@react-native-community/netinfo';
+import {parseAndFilterFunk} from '../../../../assets/constants/parseAndFilterFunk';
 
 const DateTableItem = lazy(() => import('../../dateTableItem/dateTableItem'));
 
@@ -34,8 +34,8 @@ const TeamList = ({teamId, listType}: IProps) => {
         .then(res =>
           setAllEvents(
             listType === 'feature'
-              ? endMatchFilterFunc(res?.events || [])
-              : res?.events || [],
+              ? parseAndFilterFunk(res)
+              : parseAndFilterFunk(res, true),
           ),
         );
     }
@@ -72,8 +72,8 @@ const TeamList = ({teamId, listType}: IProps) => {
         .then(res =>
           setAllEvents(
             listType === 'feature'
-              ? endMatchFilterFunc(res?.events || [])
-              : res?.events || [],
+              ? parseAndFilterFunk(res)
+              : parseAndFilterFunk(res, true),
           ),
         )
         .finally(() => setLoading(false));

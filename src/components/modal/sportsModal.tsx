@@ -29,6 +29,7 @@ export function SportsModal({navigation}: IProps) {
     });
     setTimeout(() => setCurrentSport(sportUrl));
   };
+
   return (
     <ScrollView stickyHeaderIndices={[0]} style={styles.container}>
       <View>
@@ -66,7 +67,9 @@ export function SportsModal({navigation}: IProps) {
               <CustomIcon name="a2804112" size={25} color={colors.violet} />
             )}
             <Text style={styles.text}>
-              {t(`sportsPage.sportList.${el.uuid}`)}
+              {t(`sportsPage.sportList.${el.uuid}`).includes('sportsPage')
+                ? el.name
+                : t(`sportsPage.sportList.${el.uuid}`)}
             </Text>
           </TouchableOpacity>
         ))}

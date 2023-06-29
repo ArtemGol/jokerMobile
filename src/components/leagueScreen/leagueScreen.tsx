@@ -1,14 +1,14 @@
 import {useCallback, useContext, useEffect, useState} from 'react';
 import {ActivityIndicator, Text, TouchableOpacity, View} from 'react-native';
 import {ImageBackgroundLayout} from '../imageBackgroundLayout/imageBackgroundLayout';
-import type {IEvent} from '../../../assets/api/dto/IEvent';
+import type {IEvent} from '../../../assets/api/dto/IMatch';
 import {eventRepository} from '../../../assets/api/eventRepository';
-import {endMatchFilterFunc} from '../../../assets/constants/endMatchFilterFunc';
 import {InitialStateContext} from '../../../App';
 import {colors} from '../../../assets/colors/colors';
 import {EventsFlashList} from '../eventsFlashList/eventsFlashList';
 import {useTranslation} from 'react-i18next';
 import NetInfo from '@react-native-community/netinfo';
+import {parseAndFilterFunk} from '../../../assets/constants/parseAndFilterFunk';
 
 const LeagueScreen = ({route}: {route: any}) => {
   const {locale, differanceTimeZoneInMs} = useContext(InitialStateContext);
@@ -43,7 +43,7 @@ const LeagueScreen = ({route}: {route: any}) => {
           league_uuid: route.params.leagueId,
           lang: locale,
         })
-        .then(res => setAllEvents(endMatchFilterFunc(res?.[0].data || [])));
+        .then(res => setAllEvents(parseAndFilterFunk(res)));
     }
     setRefreshing(false);
   }, [connection, route.params.leagueId, locale]);
@@ -63,7 +63,7 @@ const LeagueScreen = ({route}: {route: any}) => {
       setLoading(true);
       eventRepository
         .fetchAllEvents({league_uuid: route.params.leagueId, lang: locale})
-        .then(res => setAllEvents(endMatchFilterFunc(res?.[0].data || [])))
+        .then(res => setAllEvents(parseAndFilterFunk(res)))
         .finally(() => setLoading(false));
     }
   }, [route.params.leagueId, locale, connection]);

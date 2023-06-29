@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import {colors} from '../../../assets/colors/colors';
-import type {IEvent} from '../../../assets/api/dto/IEvent';
+import type {IEvent, IMatch} from '../../../assets/api/dto/IMatch';
 import {formatDate} from '../../../assets/constants/date';
 import {isLiveFunc} from '../../../assets/constants/isLiveFunc';
 import {CustomImage} from '../customImage/customImage';
@@ -26,7 +26,7 @@ const TeamBlock = ({teamLogo}: {teamLogo: string}) => (
 );
 
 interface IProps {
-  event: IEvent;
+  event: IMatch;
   last: boolean;
 }
 
@@ -35,6 +35,56 @@ export const TopMatchItem = ({event, last}: IProps) => {
   const {t} = useTranslation();
   const {differanceTimeZoneInMs} = useContext(InitialStateContext);
   const isLive = isLiveFunc(event.start_time, event.end_time);
+  const newEvent: IEvent = {
+    uuid: event.uuid,
+    start_time: event.start_time,
+    end_time: event.end_time,
+    status: event.status,
+    hasParticipants: event.hasParticipants,
+    event_url: event.event_url,
+    event_title: event.event_title,
+    match_uuid: event.match_uuid,
+    halftime_score: event.halftime_score,
+    title: event.title,
+    bg_image: event.bg_image,
+    sport: {
+      uuid: event.sport_uuid,
+      url: event.sport_url,
+      name: event.sport_name,
+    },
+    league: {
+      uuid: event.league_uuid,
+      url: event.league_url,
+      logo: event.league_logo,
+      name: event.league_name,
+      use_league_logo: event.use_league_logo,
+    },
+    location: {
+      name: event.name,
+      flag: event.flag,
+    },
+    participantHome: {
+      uuid: event.participantHome_uuid,
+      name: event.participant_1_name,
+      logo: event.participant_1_logo,
+      slug: event.participantHome_slug,
+      score: '',
+      et_score: '',
+      ft_score: '',
+      pen_score: '',
+    },
+    participantAway: {
+      uuid: event.participantAway_uuid,
+      name: event.participant_2_name,
+      logo: event.participant_2_logo,
+      slug: event.participantAway_slug,
+      score: '',
+      et_score: '',
+      ft_score: '',
+      pen_score: '',
+    },
+  };
+
   return (
     <ImageBackground
       resizeMode="cover"
@@ -47,7 +97,7 @@ export const TopMatchItem = ({event, last}: IProps) => {
         onPress={() =>
           navigation
             .getParent()
-            ?.navigate('Match', {title: 'About Match', item: event})
+            ?.navigate('Match', {title: 'About Match', item: newEvent})
         }
         activeOpacity={0.8}
         style={[

@@ -1,5 +1,5 @@
 import {BaseApiService} from './baseApiService';
-import type {IEvent, IPostPage, ITopMatches} from './dto/IEvent';
+import type {IMatch, IPostPage, ITopMatches} from './dto/IMatch';
 import type {IItem} from '../interfaces/IItem';
 import type {IStream} from './dto/IStream';
 
@@ -11,13 +11,19 @@ class EventRepository extends BaseApiService {
   fetchTopMatches = () => this.get<ITopMatches>('top-match-event');
 
   fetchAllEvents = (sport: IPostPage) =>
-    this.post<{data: IEvent[]}[]>('sorted-and-published', sport);
+    this.get<string[]>(
+      `v3/sorted-and-published?${
+        sport.sport_og_url
+          ? `sport_og_url=${sport.sport_og_url}`
+          : `league_uuid=${sport.league_uuid}`
+      }&lang=${sport.lang}`,
+    );
 
   fetchLeagues = (sportOgUrl: string) =>
     this.post<IItem[]>('leagues', {sport_og_url: sportOgUrl});
 
   fetchEvent = (matchId: string, eventId: string) =>
-    this.get<IEvent[]>(`match-event/${matchId}/${eventId}`);
+    this.get<IMatch[]>(`match-event/${matchId}/${eventId}`);
 
   fetchStreams = (id: string) =>
     this.post<{collection: Record<string, IStream[]>}[]>('streams', {

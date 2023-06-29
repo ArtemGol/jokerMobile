@@ -1,9 +1,9 @@
 import PushNotification from 'react-native-push-notification';
-import type {IEvent} from '../../assets/api/dto/IEvent';
+import type {IEvent} from '../../assets/api/dto/IMatch';
 import i18n from 'i18next';
 
 export const LocalNotification = (item: IEvent, date: number) => {
-  const image = item.league_logo || item.flag;
+  const image = item.league.logo || item.location.flag;
   PushNotification.localNotificationSchedule({
     largeIconUrl: `https://assets.jokerlivestream.vip/${
       image?.[0] === '/' ? image.slice(1, image.length) : image
@@ -11,9 +11,9 @@ export const LocalNotification = (item: IEvent, date: number) => {
     title: i18n.t('pushNotifications.scheduleNotification.title') || '',
     message:
       i18n.t('pushNotifications.scheduleNotification.message', {
-        homeTeam: item.participant_1_name,
-        awayTeam: item.participant_2_name,
-        league: item.league_name,
+        homeTeam: item.participantHome.name,
+        awayTeam: item.participantAway.name,
+        league: item.league.name,
       }) || '',
     id: Math.clz32(item.start_time + parseInt(item.uuid, 10)),
     channelId: 'channel-id',

@@ -4,7 +4,7 @@ import {colors} from '../../../assets/colors/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useTranslation} from 'react-i18next';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import type {IEvent} from '../../../assets/api/dto/IEvent';
+import type {IEvent} from '../../../assets/api/dto/IMatch';
 import {headerStyles} from './headerStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {

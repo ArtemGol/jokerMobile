@@ -1,5 +1,5 @@
 import {ImageBackgroundLayout} from '../imageBackgroundLayout/imageBackgroundLayout';
-import type {IEvent} from '../../../assets/api/dto/IEvent';
+import type {IEvent} from '../../../assets/api/dto/IMatch';
 import React, {useCallback, useEffect, useState} from 'react';
 import {eventRepository} from '../../../assets/api/eventRepository';
 import {MatchHeader} from '../matchHeader/matchHeader';
@@ -60,8 +60,14 @@ const MatchScreen = ({route, navigation}: {route: any; navigation: any}) => {
         setMatchState({
           ...currentMatch,
           bg_image: event.bg_image,
-          participant_1_uuid: event.participantHome_uuid,
-          participant_2_uuid: event.participantAway_uuid,
+          participantHome: {
+            ...currentMatch.participantHome,
+            uuid: event.participantHome_uuid,
+          },
+          participantAway: {
+            ...currentMatch.participantAway,
+            uuid: event.participantAway_uuid,
+          },
           halftime_score: event?.halftime_score,
         });
         if (currentMatch.bg_image !== event.bg_image) {

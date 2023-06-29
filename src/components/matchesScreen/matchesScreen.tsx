@@ -1,8 +1,7 @@
 import {useCallback, useContext, useEffect, useState} from 'react';
-import type {IEvent} from '../../../assets/api/dto/IEvent';
+import type {IEvent, IMatch} from '../../../assets/api/dto/IMatch';
 import {InitialStateContext} from '../../../App';
 import {eventRepository} from '../../../assets/api/eventRepository';
-import {endMatchFilterFunc} from '../../../assets/constants/endMatchFilterFunc';
 import {allSettled} from '../../../assets/constants/allSettled';
 import {ImageBackgroundLayout} from '../imageBackgroundLayout/imageBackgroundLayout';
 import {EventsFlashList} from '../eventsFlashList/eventsFlashList';
@@ -11,13 +10,14 @@ import {ActivityIndicator, Text, TouchableOpacity, View} from 'react-native';
 import {colors} from '../../../assets/colors/colors';
 import NetInfo from '@react-native-community/netinfo';
 import {useTranslation} from 'react-i18next';
+import {parseAndFilterFunk} from '../../../assets/constants/parseAndFilterFunk';
 
 const MatchesScreen = () => {
   const {t} = useTranslation();
   const [refreshing, setRefreshing] = useState(false);
   const [connection, setConnection] = useState(false);
 
-  const [topMatchesState, setTopMatchesState] = useState<IEvent[]>();
+  const [topMatchesState, setTopMatchesState] = useState<IMatch[]>();
 
   useEffect(() => {
     NetInfo.fetch().then(state => {
@@ -52,7 +52,7 @@ const MatchesScreen = () => {
       ]).then(([eventRes, matchRes]) => {
         setAllEvents(
           eventRes.state === 'fulfilled'
-            ? endMatchFilterFunc(eventRes.value?.[0].data || [])
+            ? parseAndFilterFunk(eventRes.value || [])
             : [],
         );
         setTopMatchesState(
@@ -97,7 +97,7 @@ const MatchesScreen = () => {
           sport_og_url: currentSport || 'football-live-stream',
           lang: locale,
         })
-        .then(res => setAllEvents(endMatchFilterFunc(res?.[0].data || [])))
+        .then(res => setAllEvents(parseAndFilterFunk(res)))
         .finally(() => setLoading(false));
     }
   }, [currentSport, connection, locale]);

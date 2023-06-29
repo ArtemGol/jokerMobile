@@ -37,7 +37,7 @@ export const formatDate = (
 const padZero = (n: number): string => (n < 10 ? `0${n}` : String(n));
 
 const daysInTimer = (n: number) =>
-  i18n.t('matchPage.timer.afterCountDays', {dayN: n});
+  i18n.t('matchPage.afterCountDays', {count: n});
 
 export const getDayOfWeek = (
   number: number,

@@ -72,6 +72,7 @@ export const ru: typeof en = {
     watch: 'Смотреть',
     link: 'Ссылка',
     streams: 'Стримы',
+    afterCountDays: 'Через {{count}} дней',
   },
   streamPage: {
     aboutStream: 'О стриме',

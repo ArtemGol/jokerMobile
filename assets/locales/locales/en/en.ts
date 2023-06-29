@@ -69,6 +69,7 @@ export const en = {
     watch: 'Watch',
     link: 'Link',
     streams: 'Streams',
+    afterCountDays: 'In {{count}} days',
   },
   streamPage: {
     aboutStream: 'About Stream',

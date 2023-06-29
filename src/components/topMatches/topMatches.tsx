@@ -3,11 +3,11 @@ import {TopMatchItem} from './topMatchItem';
 import {TopMatchItemPlug} from '../plugs/topMatchItemPlug';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {colors} from '../../../assets/colors/colors';
-import {IEvent} from '../../../assets/api/dto/IEvent';
+import {IMatch} from '../../../assets/api/dto/IMatch';
 import {useTranslation} from 'react-i18next';
 
 interface IProps {
-  topMatchesState?: IEvent[];
+  topMatchesState?: IMatch[];
 }
 
 const TopMatches = ({topMatchesState}: IProps) => {
@@ -17,6 +17,7 @@ const TopMatches = ({topMatchesState}: IProps) => {
       <Text style={styles.topMatchesTitle}>
         {t('matchesPage.topMatchesTitle')}
       </Text>
+
       <ScrollView horizontal contentContainerStyle={styles.topMatchesContainer}>
         {topMatchesState && topMatchesState?.length
           ? topMatchesState?.map((elem, i) => (

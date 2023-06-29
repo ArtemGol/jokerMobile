@@ -71,6 +71,7 @@ export const zh: typeof en = {
     watch: '手錶',
     link: '關聯',
     streams: '溪流',
+    afterCountDays: '{{count}}天內',
   },
   streamPage: {
     aboutStream: '關於流',

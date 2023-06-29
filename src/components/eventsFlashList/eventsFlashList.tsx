@@ -4,7 +4,7 @@ import {formatDate} from '../../../assets/constants/date';
 import {FlashList} from '@shopify/flash-list';
 import {colors} from '../../../assets/colors/colors';
 import {NoData} from '../noData/noData';
-import type {IEvent} from '../../../assets/api/dto/IEvent';
+import type {IEvent} from '../../../assets/api/dto/IMatch';
 import {lazy, useContext, useState} from 'react';
 import {SuccessAddedModal} from '../modals/successAddedModal';
 import {InitialStateContext} from '../../../App';
